@@ -1,4 +1,4 @@
-package sample;
+package ges.menu;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;

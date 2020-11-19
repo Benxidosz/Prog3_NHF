@@ -1,5 +1,6 @@
-package sample;
+package ges.menu;
 
+import ges.editor.Editor;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -31,7 +32,7 @@ public class Menu {
 		public void handle(Event event) {
 			SetScene(scene);
 			if (event.getSource() == createGraph) {
-				myEditor = new Editor(editor);
+				//myEditor = new Editor(editor);
 			}
 		}
 	}
@@ -49,7 +50,7 @@ public class Menu {
 
 		Parent main = FXMLLoader.load(getClass().getResource("mainMenu.fxml"));
 		Parent menuEditor = FXMLLoader.load(getClass().getResource("editorMenu.fxml"));
-		editor = FXMLLoader.load(getClass().getResource("editor.fxml"));
+		editor = FXMLLoader.load(getClass().getResource("../editor/editor.fxml"));
 
 		mainScene = new MyScene(main, "Main Menu");
 

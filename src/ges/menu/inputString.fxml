@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0"
+            prefWidth="250.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ges.menu.RenameGraph">
+    <padding>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+    </padding>
+    <top>
+        <Label id="inputLabel" fx:id="inputLabel" text="Give A String" BorderPane.alignment="CENTER"/>
+    </top>
+    <bottom>
+        <Button mnemonicParsing="false" onAction="#submit" styleClass="Button" stylesheets="@../../basicStyle.css"
+                text="Submit" BorderPane.alignment="CENTER"/>
+    </bottom>
+    <center>
+        <TextField id="inputText" fx:id="inputText" BorderPane.alignment="CENTER"/>
+    </center>
+</BorderPane>
