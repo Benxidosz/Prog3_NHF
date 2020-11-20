@@ -14,8 +14,8 @@
                 <Font name="Garuda" size="32.0"/>
             </font>
         </Button>
-        <Button layoutX="100.0" layoutY="250.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="200.0"
-                styleClass="Button" text="Modify" textAlignment="CENTER">
+        <Button layoutX="100.0" layoutY="250.0" mnemonicParsing="false" onAction="#load" prefHeight="100.0"
+                prefWidth="200.0" styleClass="Button" text="Modify" textAlignment="CENTER">
             <font>
                 <Font name="Garuda" size="32.0"/>
             </font>

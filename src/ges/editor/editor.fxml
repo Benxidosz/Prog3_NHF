@@ -77,7 +77,7 @@
                 <Menu mnemonicParsing="false" text="File">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#makeNew" text="new"/>
-                        <MenuItem mnemonicParsing="false" text="open"/>
+                        <MenuItem mnemonicParsing="false" onAction="#open" text="open"/>
                         <MenuItem mnemonicParsing="false" onAction="#save" text="save"/>
                         <MenuItem mnemonicParsing="false" onAction="#rename" text="rename"/>
                         <MenuItem mnemonicParsing="false" onAction="#export" text="export"/>

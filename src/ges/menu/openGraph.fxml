@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" maxHeight="400.0" maxWidth="-Infinity" minHeight="100.0" minWidth="-Infinity"
+            onKeyPressed="#openKeyPress" prefWidth="200.0" stylesheets="@../../basicStyle.css"
+            xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ges.menu.OpenGraphEditor">
+   <content>
+      <VBox fx:id="openFileList" alignment="CENTER" spacing="5.0"/>
+   </content>
+</ScrollPane>

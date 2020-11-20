@@ -14,18 +14,10 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(String.valueOf(new File("menu", "mainMenu.fxml"))));
-
-		loader.setControllerFactory(c -> new MainMenu(primaryStage));
-
-		Parent main = loader.load();
-		Scene mainScene = new Scene(main);
-
 		primaryStage.setResizable(false);
-		primaryStage.setScene(mainScene);
 		primaryStage.setTitle("Main Menu");
 
-		primaryStage.show();
+		new MainMenu(primaryStage);
 	}
 
 

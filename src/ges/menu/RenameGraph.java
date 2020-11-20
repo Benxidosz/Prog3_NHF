@@ -15,9 +15,11 @@ public class RenameGraph {
 	public TextField inputText;
 	Stage stage;
 	Editor editor;
+	String edit;
 
-	public RenameGraph(Editor editor) throws IOException {
+	public RenameGraph(Editor editor, String edit) throws IOException {
 		this.editor = editor;
+		this.edit = edit;
 
 		stage = new Stage();
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(String.valueOf(new File("inputString.fxml"))));
@@ -32,9 +34,9 @@ public class RenameGraph {
 	}
 
 	public void submit(ActionEvent actionEvent) {
-		String editable = inputText.getText();
+		edit = inputText.getText();
 		stage.close();
-		if (editable != null)
-			editor.refreshTitle(editable);
+		if (edit != null && !edit.equals(""))
+			editor.refreshTitle(edit);
 	}
 }

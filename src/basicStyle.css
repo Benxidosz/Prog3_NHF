@@ -18,3 +18,19 @@
     -fx-background-color: dimgray;
     -fx-border-width: 0px;
 }
+
+.DataBox {
+    -fx-border-width: 2px;
+    -fx-border-color: black;
+}
+
+.DataBox:hover {
+    -fx-background-color: lightgrey;
+    -fx-border-width: 2px;
+    -fx-border-color: black;
+}
+
+.Title {
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+}

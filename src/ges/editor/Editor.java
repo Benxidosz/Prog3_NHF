@@ -3,6 +3,7 @@ package ges.editor;
 import ges.graph.Graph;
 import ges.graph.Node;
 import ges.graph.Position;
+import ges.menu.OpenGraphEditor;
 import ges.menu.RenameGraph;
 import ges.menu.MainMenu;
 import ges.tools.*;
@@ -67,7 +68,8 @@ public class Editor {
 		wd = new File(System.getProperty("user.dir"));
 		stage.show();
 		if (graph.title.equals("Untitled"))
-			new RenameGraph(this);
+			new RenameGraph(this, graph.title);
+		graph.refresh(myCanvas);
 	}
 
 	@FXML
@@ -182,14 +184,8 @@ public class Editor {
 
 	@FXML
 	public void quit(ActionEvent actionEvent) throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(String.valueOf(new File("../menu", "mainMenu.fxml"))));
-
-		loader.setControllerFactory(c -> new MainMenu(stage));
-
-		Parent main = loader.load();
-		Scene mainScene = new Scene(main);
-		stage.setScene(mainScene);
-		stage.setTitle("Main Menu");
+		stage.close();
+		new MainMenu();
 	}
 
 	@FXML
@@ -203,7 +199,7 @@ public class Editor {
 
 	@FXML
 	public void rename(ActionEvent actionEvent) throws IOException {
-		new RenameGraph(this);
+		new RenameGraph(this, graph.title);
 	}
 
 	public void refreshTitle(String newTitle) {
@@ -227,5 +223,9 @@ public class Editor {
 	public void makeNew(ActionEvent actionEvent) throws IOException {
 		new Editor(new Graph(30));
 		stage.close();
+	}
+
+	public void open(ActionEvent actionEvent) throws IOException {
+		new OpenGraphEditor(stage);
 	}
 }

@@ -23,13 +23,10 @@ public class EditorMenu {
 	}
 
 	public void back(ActionEvent actionEvent) throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("mainMenu.fxml"));
-		loader.setControllerFactory(c -> new MainMenu(stage));
+		new MainMenu(stage);
+	}
 
-		Parent main = loader.load();
-		Scene mainScene = new Scene(main);
-
-		stage.setScene(mainScene);
-		stage.setTitle("Main Menu");
+	public void load(ActionEvent actionEvent) throws IOException {
+		new OpenGraphMenu(stage, "Editor");
 	}
 }
