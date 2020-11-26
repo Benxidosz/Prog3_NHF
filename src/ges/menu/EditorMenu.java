@@ -27,6 +27,11 @@ public class EditorMenu {
 	}
 
 	public void load(ActionEvent actionEvent) throws IOException {
-		new OpenGraphMenu(stage, "Editor");
+		OpenGraphTable gt = new OpenGraphTable();
+		Graph load = gt.getData();
+		if (load != null) {
+			new Editor(load);
+			stage.close();
+		}
 	}
 }

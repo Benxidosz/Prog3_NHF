@@ -3,10 +3,11 @@ package ges.editor;
 import ges.graph.Graph;
 import ges.graph.Node;
 import ges.graph.Position;
-import ges.menu.OpenGraphEditor;
+import ges.menu.OpenGraphTable;
 import ges.menu.RenameGraph;
 import ges.menu.MainMenu;
-import ges.tools.*;
+import ges.editor.tools.*;
+import ges.simulator.Simulator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,8 +27,7 @@ import java.io.*;
 import java.util.LinkedHashSet;
 
 public class Editor {
-	@FXML
-	public Pane canvasPane;
+
 	@FXML
 	public Button editorNewNode;
 	@FXML
@@ -42,6 +42,8 @@ public class Editor {
 	public ComboBox editorNameSwitcher;
 	@FXML
 	public Canvas myCanvas;
+	@FXML
+	public Pane canvasPane;
 
 
 	Stage stage;
@@ -63,19 +65,23 @@ public class Editor {
 
 		stage = new Stage();
 		stage.setScene(mainScene);
+		stage.setResizable(false);
 		stage.setTitle("Editor - " + graph.title);
+		stage.show();
+
 		selectedButton = null;
 		wd = new File(System.getProperty("user.dir"));
-		stage.show();
-		if (graph.title.equals("Untitled"))
-			new RenameGraph(this, graph.title);
+
+		if (graph.title.equals("Untitled")) {
+			RenameGraph myRe = new RenameGraph();
+			graph.title = myRe.getData();
+			refreshTitle();
+		}
 		graph.refresh(myCanvas);
 	}
 
 	@FXML
 	public void initialize() {
-
-
 		ObservableList<String> options =
 				FXCollections.observableArrayList(
 						"Id",
@@ -146,13 +152,13 @@ public class Editor {
 	}
 
 	@FXML
-	public void nameSwitched(ActionEvent actionEvent) {
+	public void nameSwitched() {
 		graph.setChooser((String) editorNameSwitcher.getValue());
 		graph.refresh(myCanvas);
 	}
 
 	@FXML
-	public void sort(ActionEvent actionEvent) {
+	public void sort() {
 		double r = 300;
 		double cx = myCanvas.getWidth() / 2;
 		double cy = myCanvas.getHeight() / 2;
@@ -183,13 +189,13 @@ public class Editor {
 	}
 
 	@FXML
-	public void quit(ActionEvent actionEvent) throws IOException {
+	public void quit() throws IOException {
 		stage.close();
 		new MainMenu();
 	}
 
 	@FXML
-	public void export(ActionEvent actionEvent) throws IOException {
+	public void export() throws IOException {
 		File export = new File(wd, "final");
 		if (!export.isDirectory())
 			export.mkdir();
@@ -198,34 +204,49 @@ public class Editor {
 	}
 
 	@FXML
-	public void rename(ActionEvent actionEvent) throws IOException {
-		new RenameGraph(this, graph.title);
+	public void rename() throws IOException {
+		RenameGraph myRe = new RenameGraph();
+		graph.title = myRe.getData();
+		System.out.println(graph.title);
+		refreshTitle();
 	}
 
-	public void refreshTitle(String newTitle) {
-		graph.title = newTitle;
+	public void refreshTitle() {
 		stage.setTitle("Editor - " + graph.title);
 	}
 
 	@FXML
-	public void save(ActionEvent actionEvent) throws IOException {
+	public void save() throws IOException {
 		File saves = new File(wd, "saves");
 		if (!saves.isDirectory())
 			saves.mkdir();
 
-		FileOutputStream fout = new FileOutputStream(new File(saves, graph.title + ".dat"));
+		FileOutputStream fout = new FileOutputStream(new File(saves, graph.title + ".ges"));
 		ObjectOutputStream oos = new ObjectOutputStream(fout);
 		oos.writeObject(graph);
 		oos.close();
 	}
 
 	@FXML
-	public void makeNew(ActionEvent actionEvent) throws IOException {
+	public void makeNew() throws IOException {
 		new Editor(new Graph(30));
 		stage.close();
 	}
 
-	public void open(ActionEvent actionEvent) throws IOException {
-		new OpenGraphEditor(stage);
+	@FXML
+	public void open() throws IOException {
+		OpenGraphTable gt = new OpenGraphTable();
+		Graph load = gt.getData();
+		if (load != null) {
+			new Editor(load);
+			stage.close();
+		}
+	}
+
+	@FXML
+	public void goSimulator() throws IOException {
+		save();
+		stage.close();
+		new Simulator(graph);
 	}
 }

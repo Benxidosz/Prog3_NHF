@@ -36,7 +36,7 @@ public class Node extends Scheme implements Serializable {
 		return neighbours.remove(neighbour);
 	}
 
-	public LinkedHashSet getNeighbours() {
+	public LinkedHashSet<Node> getNeighbours() {
 		return neighbours;
 	}
 
@@ -81,6 +81,32 @@ public class Node extends Scheme implements Serializable {
 			gc.strokeText(id, x, y, myGraph.nodeRadius * 2);
 		else
 			gc.strokeText(String.valueOf(getDim()), x, y, myGraph.nodeRadius * 2);
+	}
+
+	public void drawProcessed(Canvas canvas) {
+		GraphicsContext gc = canvas.getGraphicsContext2D();
+		double x = pos.x;
+		double y = pos.y;
+
+		gc.setFill(Color.GREEN);
+		gc.fillOval(x - myGraph.nodeRadius, y - myGraph.nodeRadius, myGraph.nodeRadius * 2, myGraph.nodeRadius * 2);
+
+		drawStroke(x, y, gc);
+
+		gc.strokeText(id, x, y, myGraph.nodeRadius * 2);
+	}
+
+	public void drawUnderProcess(Canvas canvas) {
+		GraphicsContext gc = canvas.getGraphicsContext2D();
+		double x = pos.x;
+		double y = pos.y;
+
+		gc.setFill(Color.YELLOW);
+		gc.fillOval(x - myGraph.nodeRadius, y - myGraph.nodeRadius, myGraph.nodeRadius * 2, myGraph.nodeRadius * 2);
+
+		drawStroke(x, y, gc);
+
+		gc.strokeText(id, x, y, myGraph.nodeRadius * 2);
 	}
 
 	@Override

@@ -34,3 +34,9 @@
     -fx-font-weight: bold;
     -fx-font-size: 16px;
 }
+
+.centerColumn {
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-font-size: 17px;
+}

@@ -14,12 +14,12 @@
                 <Font name="Garuda" size="32.0"/>
             </font>
         </Button>
-        <Button layoutX="100.0" layoutY="250.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="200.0"
-                styleClass="Button" text="Simulator" textAlignment="CENTER">
+        <Button layoutX="100.0" layoutY="250.0" mnemonicParsing="false" onAction="#toSimulator" prefHeight="100.0"
+                prefWidth="200.0" styleClass="Button" text="Simulator" textAlignment="CENTER">
             <font>
                 <Font name="Garuda" size="32.0"/>
             </font>
-      </Button>
+        </Button>
         <Button fx:id="quitMenu" layoutX="100.0" layoutY="400.0" mnemonicParsing="false" onAction="#quit"
                 prefHeight="100.0" prefWidth="200.0" styleClass="Button" text="Quit">
             <font>

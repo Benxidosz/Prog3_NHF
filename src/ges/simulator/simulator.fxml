@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0"
+            prefWidth="1080.0" stylesheets="@../../basicStyle.css" xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ges.simulator.Simulator">
+    <left>
+        <GridPane alignment="CENTER" hgap="5.0" minWidth="75.0" prefWidth="125.0" vgap="5.0"
+                  BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="120.0" minWidth="10.0"
+                                   prefWidth="120.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="400.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <ComboBox fx:id="algoSwitch" depthTest="DISABLE" onAction="#algoSwitch" prefHeight="50.0"
+                          prefWidth="100.0" promptText="BFS"/>
+                <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308"
+                        maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#simulateStart"
+                        styleClass="Button" text="Start" GridPane.halignment="CENTER" GridPane.rowIndex="2"
+                        GridPane.valignment="CENTER"/>
+                <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308"
+                        maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#simulateGoToEditor"
+                        prefWidth="100.0" styleClass="Button" text="Go Simulate" textAlignment="CENTER" wrapText="true"
+                        GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER"/>
+                <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                    <children>
+                        <Slider fx:id="timeChangerSlider" layoutX="50.0" layoutY="40.0" majorTickUnit="0.4" max="5.0"
+                                min="0.2" minorTickCount="1" onMouseDragged="#sliderDrag" onScroll="#sliderScroll"
+                                orientation="VERTICAL" prefHeight="350.0" prefWidth="20.0" showTickLabels="true"
+                                showTickMarks="true" snapToTicks="true" value="2.6"/>
+                        <TextField fx:id="timeChangerText" alignment="CENTER" layoutX="25.0" layoutY="14.0"
+                                   prefWidth="70.0" text="2.6"/>
+                    </children>
+                </AnchorPane>
+            </children>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </GridPane>
+    </left>
+    <center>
+        <Pane fx:id="canvasPane" BorderPane.alignment="CENTER">
+            <children>
+                <Canvas fx:id="myCanvas" height="695.0" onDragDetected="#sliderDrag" onMouseClicked="#canvasMouseClick"
+                        onMouseDragged="#canvasDrag" onMouseMoved="#canvasMouseMove" onMousePressed="#canvasPress"
+                        onMouseReleased="#canvasRelease" onScroll="#canvasScroll" width="955.0"/>
+            </children>
+        </Pane>
+    </center>
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#open" text="open"/>
+                        <MenuItem mnemonicParsing="false" onAction="#quit" text="quit"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+</BorderPane>

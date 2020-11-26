@@ -1,4 +1,4 @@
-package ges.tools;
+package ges.editor.tools;
 
 import ges.graph.Graph;
 import javafx.scene.canvas.Canvas;

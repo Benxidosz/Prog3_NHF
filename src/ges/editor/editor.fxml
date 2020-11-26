@@ -51,9 +51,9 @@
                         textAlignment="CENTER" wrapText="true" GridPane.rowIndex="4"/>
                 <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
                         onAction="#sort" styleClass="Button" text="Sort" GridPane.rowIndex="6"/>
-                <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                        styleClass="Button" text="Go to Simulator" textAlignment="CENTER" wrapText="true"
-                        GridPane.rowIndex="7"/>
+                <Button alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                        mnemonicParsing="false" onAction="#goSimulator" styleClass="Button" text="Go to Simulator"
+                        textAlignment="CENTER" wrapText="true" GridPane.rowIndex="7"/>
                 <ComboBox fx:id="editorNameSwitcher" onAction="#nameSwitched" prefWidth="100.0" GridPane.rowIndex="5"/>
             </children>
             <padding>
