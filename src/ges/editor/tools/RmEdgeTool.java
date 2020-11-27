@@ -1,5 +1,6 @@
 package ges.editor.tools;
 
+import ges.editor.StepTracker;
 import ges.graph.Edge;
 import ges.graph.Graph;
 import ges.graph.Node;
@@ -11,8 +12,8 @@ import javafx.scene.input.ScrollEvent;
 public class RmEdgeTool extends Tool {
 	private Node selectedNode;
 
-	public RmEdgeTool(Graph g) {
-		super(g);
+	public RmEdgeTool(Graph g, StepTracker stepTracker) {
+		super(g, stepTracker);
 	}
 
 	@Override
@@ -30,6 +31,7 @@ public class RmEdgeTool extends Tool {
 					graph.rmEdge(selectedNode, select);
 					selectedNode.selected(false);
 					selectedNode = null;
+					tracker.addStep(graph);
 				}
 			}
 			graph.refresh(canvas);

@@ -17,4 +17,8 @@ public class Position implements Serializable {
 		this.x = event.getX();
 		this.y = event.getY();
 	}
+
+	public Position(Position pos) {
+		this(pos.x, pos.y);
+	}
 }

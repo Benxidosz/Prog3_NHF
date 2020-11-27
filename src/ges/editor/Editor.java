@@ -18,6 +18,8 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
@@ -48,6 +50,7 @@ public class Editor {
 
 	Stage stage;
 	Graph graph;
+	StepTracker stepTracker;
 
 	Button selectedButton;
 	Tool activeTool;
@@ -56,6 +59,7 @@ public class Editor {
 
 	public Editor(Graph g) throws IOException {
 		graph = g;
+		stepTracker = new StepTracker(graph, 5);
 
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("editor.fxml"));
 		loader.setControllerFactory(c -> this);
@@ -99,15 +103,15 @@ public class Editor {
 		selectedButton = (Button) actionEvent.getSource();
 
 		if (selectedButton == editorNewNode) {
-			activeTool = new NewNodeTool(graph, editorNameSwitcher);
+			activeTool = new NewNodeTool(graph, editorNameSwitcher, stepTracker);
 		} else if (selectedButton == editorRmNode) {
-			activeTool = new RmNodeTool(graph);
+			activeTool = new RmNodeTool(graph, stepTracker);
 		} else if (selectedButton == editorMove) {
-			activeTool = new MovingTool(graph);
+			activeTool = new MovingTool(graph, stepTracker);
 		} else if (selectedButton == editorNewEdge) {
-			activeTool = new NewEdgeTool(graph);
+			activeTool = new NewEdgeTool(graph, stepTracker);
 		} else if (selectedButton == editorRmEdge) {
-			activeTool = new RmEdgeTool(graph);
+			activeTool = new RmEdgeTool(graph, stepTracker);
 		} else {
 			activeTool = null;
 		}
@@ -140,13 +144,13 @@ public class Editor {
 	}
 
 	@FXML
-	public void canvasMouseRelease(MouseEvent mouseEvent) {
+	public void canvasMouseRelease(MouseEvent mouseEvent) throws CloneNotSupportedException {
 		if (activeTool != null)
 			activeTool.released(mouseEvent, myCanvas);
 	}
 
 	@FXML
-	public void canvasMouseDrag(MouseEvent mouseEvent) {
+	public void canvasMouseDrag(MouseEvent mouseEvent) throws CloneNotSupportedException {
 		if (activeTool != null)
 			activeTool.drag(mouseEvent, myCanvas);
 	}
@@ -180,6 +184,7 @@ public class Editor {
 		}
 
 		graph.refresh(myCanvas);
+		stepTracker.addStep(graph);
 	}
 
 	@FXML
@@ -248,5 +253,40 @@ public class Editor {
 		save();
 		stage.close();
 		new Simulator(graph);
+	}
+
+	@FXML
+	public void editorUndo() {
+		try {
+			graph = stepTracker.undoStep();
+		} catch (StepTracker.NoStepException noStepException) {
+			System.err.println(noStepException.getMessage());
+		}
+		graph.refresh(myCanvas);
+		if (activeTool != null)
+			activeTool.setGraph(graph);
+	}
+
+	@FXML
+	public void editorRedo() {
+		try {
+			graph = stepTracker.redoStep();
+		} catch (StepTracker.NoStepException noStepException) {
+			System.err.println(noStepException.getMessage());
+		}
+		graph.refresh(myCanvas);
+		if (activeTool != null)
+			activeTool.setGraph(graph);
+	}
+
+	public void editorKeyPressed(KeyEvent keyEvent) {
+		if (keyEvent.isControlDown()) {
+			if (keyEvent.getCode().equals(KeyCode.Z)) {
+				if (keyEvent.isShiftDown())
+					editorRedo();
+				else
+					editorUndo();
+			}
+		}
 	}
 }

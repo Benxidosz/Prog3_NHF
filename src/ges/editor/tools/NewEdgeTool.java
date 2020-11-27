@@ -1,5 +1,6 @@
 package ges.editor.tools;
 
+import ges.editor.StepTracker;
 import ges.graph.Edge;
 import ges.graph.Graph;
 import ges.graph.Node;
@@ -12,8 +13,8 @@ public class NewEdgeTool extends Tool {
 
 	private Node selectedNode;
 
-	public NewEdgeTool(Graph g) {
-		super(g);
+	public NewEdgeTool(Graph g, StepTracker stepTracker) {
+		super(g, stepTracker);
 		selectedNode = null;
 	}
 
@@ -29,9 +30,10 @@ public class NewEdgeTool extends Tool {
 					selectedNode.selected(false);
 					selectedNode = null;
 				} else {
-					graph.addEdge(selectedNode, select, canvas);
+					graph.addEdge(selectedNode, select);
 					selectedNode.selected(false);
 					selectedNode = null;
+					tracker.addStep(graph);
 				}
 			}
 			graph.refresh(canvas);

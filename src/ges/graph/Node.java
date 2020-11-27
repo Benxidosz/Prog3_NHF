@@ -9,10 +9,10 @@ import javafx.scene.paint.Paint;
 import java.io.Serializable;
 import java.util.LinkedHashSet;
 
-public class Node extends Scheme implements Serializable {
-	private final LinkedHashSet<Node> neighbours;
-	private final String id;
-	private final Graph myGraph;
+public class Node extends Scheme {
+	private LinkedHashSet<Node> neighbours;
+	private String id;
+	private Graph myGraph;
 	private boolean selceted;
 	private String chooser;
 
@@ -26,6 +26,10 @@ public class Node extends Scheme implements Serializable {
 		this.chooser = chooser;
 
 		neighbours = new LinkedHashSet<Node>();
+	}
+
+	Node(Graph graph, Node node) {
+		this(graph, node.id, new Position(node.pos), node.chooser);
 	}
 
 	public boolean push(Node neighbour) {
@@ -141,4 +145,5 @@ public class Node extends Scheme implements Serializable {
 	public Graph getGraph() {
 		return myGraph;
 	}
+
 }

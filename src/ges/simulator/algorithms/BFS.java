@@ -3,11 +3,6 @@ package ges.simulator.algorithms;
 import ges.graph.Graph;
 import ges.graph.Node;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.input.MouseEvent;
-
-import java.util.Queue;
-
-import static java.lang.Thread.sleep;
 
 public class BFS extends Algorithm {
 	public BFS(Graph g) {

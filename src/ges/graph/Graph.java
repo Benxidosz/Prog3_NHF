@@ -6,13 +6,13 @@ import javafx.scene.control.ComboBox;
 import java.io.*;
 import java.util.LinkedHashSet;
 
-public class Graph implements Serializable {
+public class Graph implements Serializable, Cloneable {
 	public int nodeRadius;
-	private final StringBuilder tmpId;
+	private StringBuilder tmpId;
 	public String title;
 
-	private final LinkedHashSet<Node> nodes;
-	private final LinkedHashSet<Edge> edges;
+	private LinkedHashSet<Node> nodes;
+	private LinkedHashSet<Edge> edges;
 
 	public Graph(int nodeRadius) {
 		title = "Untitled";
@@ -21,6 +21,45 @@ public class Graph implements Serializable {
 
 		nodes = new LinkedHashSet<>();
 		edges = new LinkedHashSet<>();
+	}
+
+	public Graph(Graph graph) {
+		nodeRadius = graph.nodeRadius;
+		nodes = new LinkedHashSet<Node>();
+		edges = new LinkedHashSet<Edge>();
+		LinkedHashSet<Node> added = new LinkedHashSet<>();
+		for (Edge edge : graph.edges) {
+			Node n1 = null;
+			Node n2 = null;
+			if (!added.contains(edge.nodes[0])) {
+				n1 = new Node(this, edge.nodes[0]);
+				nodes.add(n1);
+				added.add(edge.nodes[0]);
+			} else {
+				n1 = getNode(edge.nodes[0].getId());
+			}
+
+
+			if (!added.contains(edge.nodes[1])) {
+				n2 = new Node(this, edge.nodes[1]);
+				nodes.add(n2);
+				added.add(edge.nodes[1]);
+			} else {
+				n2 = getNode(edge.nodes[1].getId());
+			}
+
+			if (n1 != null && n2 != null)
+				addEdge(n1, n2);
+		}
+		for (Node node : graph.nodes) {
+			if (!added.contains(node)) {
+				Node cpyNode = new Node(this, node);
+				nodes.add(cpyNode);
+				added.add(cpyNode);
+			}
+		}
+		tmpId = new StringBuilder(graph.tmpId);
+		title = graph.title;
 	}
 
 	public void setChooser(String choose) {
@@ -69,6 +108,14 @@ public class Graph implements Serializable {
 		return null;
 	}
 
+	public Node getNode(String id) {
+		for (Node node : nodes) {
+			if (node.getId().equals(id))
+				return node;
+		}
+		return null;
+	}
+
 	private Edge getEdge(Node n1, Node n2) {
 		Edge searched = null;
 		for (Edge edge : edges) {
@@ -80,9 +127,9 @@ public class Graph implements Serializable {
 		return searched;
 	}
 
-	public boolean addEdge(Node n1, Node n2, Canvas canvas) {
+	public boolean addEdge(Node n1, Node n2) {
 		Edge newEdge = getEdge(n1, n2);
-		boolean ret = true;
+		boolean ret;
 		if (newEdge != null) {
 			return true;
 		} else {

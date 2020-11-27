@@ -1,15 +1,12 @@
 package ges.menu;
 
-import ges.editor.Editor;
 import ges.graph.Graph;
 import ges.simulator.Simulator;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 
 public class MainMenu {
@@ -45,22 +42,22 @@ public class MainMenu {
 		stage.show();
 	}
 
-	public void quit(ActionEvent actionEvent) {
+	public void quit() {
 		stage.close();
 	}
 
-	public void toEditorMenu(ActionEvent actionEvent) throws IOException {
+	public void toEditorMenu() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("editorMenu.fxml"));
 
 		loader.setControllerFactory(c -> new EditorMenu(stage));
 
 		Parent menuEditorP = loader.load();
-		MyScene editorMenu = new MyScene(menuEditorP, "Editor Menu");
-		stage.setTitle(editorMenu.GetTitle());
+		Scene editorMenu = new Scene(menuEditorP);
+		stage.setTitle("Editor Menu");
 		stage.setScene(editorMenu);
 	}
 
-	public void toSimulator(ActionEvent actionEvent) throws IOException {
+	public void toSimulator() throws IOException {
 		OpenGraphTable gt = new OpenGraphTable();
 		Graph load = gt.getData();
 		if (load != null) {

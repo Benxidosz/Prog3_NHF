@@ -1,5 +1,6 @@
 package ges.editor.tools;
 
+import ges.editor.StepTracker;
 import ges.graph.Graph;
 import ges.graph.Node;
 import ges.graph.Position;
@@ -14,10 +15,11 @@ public class MovingTool extends Tool {
 	private double mx;
 	private double my;
 
-	public MovingTool(Graph g) {
-		super(g);
+	public MovingTool(Graph g, StepTracker tracker) {
+		super(g, tracker);
 		selected = null;
 	}
+
 
 	@Override
 	public void click(MouseEvent mouseEvent, Canvas canvas) {
@@ -44,6 +46,7 @@ public class MovingTool extends Tool {
 				node.verifyPos();
 			}
 		selected = null;
+		tracker.addStep(graph);
 	}
 
 	@Override

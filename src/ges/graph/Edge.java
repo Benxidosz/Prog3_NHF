@@ -1,12 +1,13 @@
 package ges.graph;
 
+import ges.editor.Editor;
 import javafx.scene.CacheHint;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.io.Serializable;
 
-public class Edge extends Scheme implements Serializable {
+public class Edge extends Scheme {
 	Node[] nodes;
 
 	Edge(Node n1, Node n2) {
@@ -65,4 +66,5 @@ public class Edge extends Scheme implements Serializable {
 	public boolean nodeInEdge(Node node) {
 		return nodes[0] == node || nodes[1] == node;
 	}
+
 }
