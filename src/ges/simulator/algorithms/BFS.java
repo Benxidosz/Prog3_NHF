@@ -4,35 +4,60 @@ import ges.graph.Graph;
 import ges.graph.Node;
 import javafx.scene.canvas.Canvas;
 
+import java.util.concurrent.LinkedBlockingQueue;
+
 public class BFS extends Algorithm {
+	LinkedBlockingQueue<Node> processed;
+	LinkedBlockingQueue<Node> processQueue;
+
 	public BFS(Graph g) {
 		super(g);
 	}
 
 	@Override
-	public void process(Canvas canvas, Node start, Double time) {
-		long ms = (long) (time * 1000);
-		startTime = System.currentTimeMillis();
-		first = true;
-
-		NodeQueue queue = new NodeQueue();
-		NodeQueue processed = new NodeQueue();
-		queue.push(start);
-		while (!queue.isEmpty()) {
-			if (first || System.currentTimeMillis() - startTime > ms) {
-				first = false;
-				Node active = queue.front();
-				processed.push(active);
-				active.drawProcessed(canvas);
-				for (Node neighbour : active.getNeighbours()) {
-					if (!processed.contains(neighbour) && !queue.contains(neighbour)) {
-						queue.push(neighbour);
-						neighbour.drawUnderProcess(canvas);
+	public void step() {
+		if (processQueue.isEmpty()) {
+			state = AlgoState.done;
+		} else {
+			Node underProcess = processQueue.poll();
+			for (Node nei : underProcess.getNeighbours()) {
+				if (!(processed.contains(nei) || processQueue.contains(nei))) {
+					try {
+						processQueue.put(nei);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
+					nei.setDrawState(AlgoState.onProgress);
 				}
-				startTime = System.currentTimeMillis();
 			}
+
+			try {
+				processed.put(underProcess);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			underProcess.setDrawState(AlgoState.done);
+			graph.refresh(canvas);
 		}
-		first = true;
+	}
+
+	@Override
+	public void start(Canvas canvas, Node start) {
+		this.canvas = canvas;
+		state = AlgoState.onProgress;
+		processed = new LinkedBlockingQueue<>();
+		processQueue = new LinkedBlockingQueue<>();
+		try {
+			processQueue.put(start);
+			start.setDrawState(AlgoState.onProgress);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		graph.refresh(canvas);
+	}
+
+	@Override
+	public int getCycle() {
+		return (graph.getNodes().size() + 2);
 	}
 }

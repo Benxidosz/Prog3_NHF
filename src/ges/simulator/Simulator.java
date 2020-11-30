@@ -6,27 +6,30 @@ import ges.graph.Node;
 import ges.graph.Position;
 import ges.menu.MainMenu;
 import ges.menu.OpenGraphTable;
+import ges.simulator.algorithms.AlgoState;
 import ges.simulator.algorithms.Algorithm;
 import ges.simulator.algorithms.BFS;
 import ges.simulator.algorithms.DFS;
-import ges.simulator.algorithms.NodeQueue;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Simulator {
 	@FXML
@@ -34,9 +37,13 @@ public class Simulator {
 	@FXML
 	public Slider timeChangerSlider;
 	@FXML
-	public TextField timeChangerText;
+	public Label timeChangerText;
 	@FXML
 	public ComboBox algoSwitch;
+	@FXML
+	public Button startButton;
+	@FXML
+	public Button stepButton;
 
 	Graph graph;
 	Stage stage;
@@ -44,6 +51,7 @@ public class Simulator {
 	File wd;
 	Node startNode;
 	Algorithm activeAlgo;
+	Timeline myTime;
 
 	long startTime;
 	boolean first;
@@ -106,7 +114,7 @@ public class Simulator {
 	@FXML
 	public void canvasMouseMove(MouseEvent mouseEvent) {
 		Node hoover = graph.getNode(new Position(mouseEvent));
-		if (hoover != null) {
+		if (hoover != null && activeAlgo.getState().equals(AlgoState.notStarted)) {
 			hoover.hoover(myCanvas);
 		} else {
 			graph.refresh(myCanvas);
@@ -159,11 +167,13 @@ public class Simulator {
 			timeChangerSlider.adjustValue(value);
 		}
 
+		timeChangerSlider.setValue(Math.floor(timeChangerSlider.getValue() * 100) / 100);
 		timeChangerText.setText(String.valueOf(timeChangerSlider.getValue()));
 	}
 
 	@FXML
 	public void sliderDrag() {
+		timeChangerSlider.setValue(Math.floor(timeChangerSlider.getValue() * 100) / 100);
 		timeChangerText.setText(String.valueOf(timeChangerSlider.getValue()));
 	}
 
@@ -200,6 +210,7 @@ public class Simulator {
 		new Editor(graph);
 	}
 
+	@FXML
 	public void algoSwitch() {
 		if ("BFS".equals(algoSwitch.getValue())) {
 			activeAlgo = new BFS(graph);
@@ -208,35 +219,41 @@ public class Simulator {
 		}
 	}
 
+	@FXML
 	public void simulateStart() {
-		if (startNode != null) {
-			if ("BFS".equals(algoSwitch.getValue())) {
-				long ms = (long) (timeChangerSlider.getValue() * 1000);
-				startTime = System.currentTimeMillis();
-				first = true;
-
-				NodeQueue queue = new NodeQueue();
-				NodeQueue processed = new NodeQueue();
-				queue.push(startNode);
-				while (!queue.isEmpty()) {
-					if (first || System.currentTimeMillis() - startTime > ms) {
-						first = false;
-						Node active = queue.front();
-						processed.push(active);
-						active.drawProcessed(myCanvas);
-						for (Node neighbour : active.getNeighbours()) {
-							if (!processed.contains(neighbour) && !queue.contains(neighbour)) {
-								queue.push(neighbour);
-								neighbour.drawUnderProcess(myCanvas);
-							}
-						}
-						startTime = System.currentTimeMillis();
-					}
-				}
-				first = true;
-			} else if ("DFS".equals(algoSwitch.getValue())) {
-				activeAlgo = new DFS(graph);
+		if (activeAlgo.getState().equals(AlgoState.notStarted)) {
+			if (startNode != null) {
+				startButton.setText("Reset");
+				stepButton.setDisable(true);
+				activeAlgo.start(myCanvas, startNode);
+				myTime = new Timeline();
+				myTime.setCycleCount(activeAlgo.getCycle());
+				myTime.getKeyFrames().add(new KeyFrame(Duration.seconds(timeChangerSlider.getValue()), (ActionEvent) -> simulateStep()));
+				myTime.playFromStart();
 			}
+		} else {
+			stepButton.setDisable(false);
+			activeAlgo.reset();
+			if (myTime != null)
+				myTime.stop();
+			startButton.setText("Start");
 		}
+	}
+
+	@FXML
+	public void simulateStep() {
+		if (activeAlgo.getState().equals(AlgoState.done)) {
+			activeAlgo.reset();
+			if (myTime != null)
+				myTime.stop();
+			startButton.setText("Start");
+			stepButton.setDisable(false);
+		} else if (activeAlgo.getState().equals(AlgoState.onProgress))
+			activeAlgo.step();
+		else if (activeAlgo.getState().equals(AlgoState.notStarted))
+			if (startNode != null) {
+				activeAlgo.start(myCanvas, startNode);
+				startButton.setText("Reset");
+			}
 	}
 }

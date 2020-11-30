@@ -1,20 +1,19 @@
 package ges.graph;
 
+import ges.simulator.algorithms.AlgoState;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ComboBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
-import java.io.Serializable;
 import java.util.LinkedHashSet;
 
 public class Node extends Scheme {
-	private LinkedHashSet<Node> neighbours;
-	private String id;
-	private Graph myGraph;
-	private boolean selceted;
+	private final LinkedHashSet<Node> neighbours;
+	private final String id;
+	private final Graph myGraph;
+	private boolean selected;
 	private String chooser;
+	private AlgoState drawState;
 
 	Node(Graph graph, String id, Position pos, String chooser) {
 		super(pos);
@@ -22,14 +21,16 @@ public class Node extends Scheme {
 		this.pos = pos;
 		this.id = id;
 		this.myGraph = graph;
-		selceted = false;
+		selected = false;
 		this.chooser = chooser;
+		drawState = AlgoState.notStarted;
 
 		neighbours = new LinkedHashSet<Node>();
 	}
 
 	Node(Graph graph, Node node) {
 		this(graph, node.id, new Position(node.pos), node.chooser);
+		drawState = AlgoState.notStarted;
 	}
 
 	public boolean push(Node neighbour) {
@@ -73,10 +74,18 @@ public class Node extends Scheme {
 			x = pos.x;
 			y = pos.y;
 		}
-		if (selceted)
-			gc.setFill(Color.RED);
-		else
-			gc.setFill(Color.WHITE);
+
+		if (drawState.equals(AlgoState.notStarted))
+			if (selected)
+				gc.setFill(Color.RED);
+			else
+				gc.setFill(Color.WHITE);
+		else if (drawState.equals(AlgoState.onProgress))
+			gc.setFill(Color.LIGHTYELLOW);
+		else if (drawState.equals(AlgoState.done))
+			gc.setFill(Color.GREEN);
+
+
 		gc.fillOval(x - myGraph.nodeRadius, y - myGraph.nodeRadius, myGraph.nodeRadius * 2, myGraph.nodeRadius * 2);
 
 		drawStroke(x, y, gc);
@@ -87,36 +96,10 @@ public class Node extends Scheme {
 			gc.strokeText(String.valueOf(getDim()), x, y, myGraph.nodeRadius * 2);
 	}
 
-	public void drawProcessed(Canvas canvas) {
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-		double x = pos.x;
-		double y = pos.y;
-
-		gc.setFill(Color.GREEN);
-		gc.fillOval(x - myGraph.nodeRadius, y - myGraph.nodeRadius, myGraph.nodeRadius * 2, myGraph.nodeRadius * 2);
-
-		drawStroke(x, y, gc);
-
-		gc.strokeText(id, x, y, myGraph.nodeRadius * 2);
-	}
-
-	public void drawUnderProcess(Canvas canvas) {
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-		double x = pos.x;
-		double y = pos.y;
-
-		gc.setFill(Color.YELLOW);
-		gc.fillOval(x - myGraph.nodeRadius, y - myGraph.nodeRadius, myGraph.nodeRadius * 2, myGraph.nodeRadius * 2);
-
-		drawStroke(x, y, gc);
-
-		gc.strokeText(id, x, y, myGraph.nodeRadius * 2);
-	}
-
 	@Override
 	public void hoover(Canvas canvas) {
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-		if (selceted)
+		if (selected)
 			gc.setFill(Color.DARKRED);
 		else
 			gc.setFill(Color.LIGHTYELLOW);
@@ -139,11 +122,14 @@ public class Node extends Scheme {
 	}
 
 	public void selected(boolean select) {
-		this.selceted = select;
+		this.selected = select;
 	}
 
 	public Graph getGraph() {
 		return myGraph;
 	}
 
+	public void setDrawState(AlgoState drawState) {
+		this.drawState = drawState;
+	}
 }
