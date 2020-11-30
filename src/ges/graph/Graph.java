@@ -133,7 +133,11 @@ public class Graph implements Serializable, Cloneable {
 		if (newEdge != null) {
 			return true;
 		} else {
-			ret = edges.add(new Edge(n1, n2));
+			if (!n1.equals(n2)) {
+				ret = edges.add(new Edge(n1, n2));
+			} else {
+				ret = false;
+			}
 		}
 
 		ret = ret && n1.push(n2);

@@ -144,13 +144,13 @@ public class Editor {
 	}
 
 	@FXML
-	public void canvasMouseRelease(MouseEvent mouseEvent) throws CloneNotSupportedException {
+	public void canvasMouseRelease(MouseEvent mouseEvent) {
 		if (activeTool != null)
 			activeTool.released(mouseEvent, myCanvas);
 	}
 
 	@FXML
-	public void canvasMouseDrag(MouseEvent mouseEvent) throws CloneNotSupportedException {
+	public void canvasMouseDrag(MouseEvent mouseEvent) {
 		if (activeTool != null)
 			activeTool.drag(mouseEvent, myCanvas);
 	}

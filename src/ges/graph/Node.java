@@ -34,6 +34,8 @@ public class Node extends Scheme {
 	}
 
 	public boolean push(Node neighbour) {
+		if (this.equals(neighbour))
+			return false;
 		return neighbours.add(neighbour);
 	}
 

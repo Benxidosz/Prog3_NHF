@@ -92,7 +92,7 @@ public class Simulator {
 						"BFS",
 						"DFS"
 				);
-		algoSwitch.setItems(options);
+		algoSwitch.getItems().setAll(options);
 		algoSwitch.setValue("BFS");
 	}
 
