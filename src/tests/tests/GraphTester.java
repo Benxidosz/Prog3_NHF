@@ -8,7 +8,6 @@ import ges.graph.Node;
 import org.junit.Test;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class GraphTester {
 	Graph testGraph;
@@ -18,7 +17,7 @@ public class GraphTester {
 	public void init() {
 		testGraph = new Graph(50);
 		for (int i = 0; i < 5; ++i) {
-			testGraph.addNode(new Position(100, (100 + i * 50)), null, null);
+			testGraph.addNode(new Position(100, (100 + i * 50)), null);
 		}
 
 		testNodes = new HashMap<>();
@@ -101,7 +100,7 @@ public class GraphTester {
 
 	@Test
 	public void testRemoveNode() {
-		testGraph.rmNode(testNodes.get("C"), null);
+		testGraph.rmNode(testNodes.get("C"));
 		Node nodeCId = testGraph.getNode(testNodes.get("C").getId());
 		Node nodeCPos = testGraph.getNode(testNodes.get("C").getPosition());
 		Assert.assertNull(nodeCId);
@@ -140,7 +139,7 @@ public class GraphTester {
 	public void testIdGenerator() {
 		Graph testIdGraph = new Graph(50);
 		for (char i = 'A'; i <= ('Z' + 1); ++i) {
-			testIdGraph.addNode(new Position(0, 0), null, null);
+			testIdGraph.addNode(new Position(0, 0), null);
 		}
 		Assert.assertNotNull(testIdGraph.getNode("AA"));
 	}

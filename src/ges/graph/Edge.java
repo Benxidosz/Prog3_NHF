@@ -1,14 +1,9 @@
 package ges.graph;
 
-import ges.editor.Editor;
-import javafx.scene.CacheHint;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-
-import java.io.Serializable;
 
 public class Edge extends Scheme {
-	Node[] nodes;
+	final Node[] nodes;
 
 	Edge(Node n1, Node n2) {
 		super(new Position(Math.sqrt(Math.pow(n1.getPosition().x - n2.getPosition().x, 2)), Math.sqrt(Math.pow(n1.getPosition().y - n2.getPosition().y, 2))));

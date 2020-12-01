@@ -1,7 +1,5 @@
 package ges.menu;
 
-import ges.editor.Editor;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,7 +12,7 @@ import java.io.IOException;
 
 public class RenameGraph {
 	public TextField inputText;
-	Stage stage;
+	final Stage stage;
 	String data;
 
 	public RenameGraph() throws IOException {
@@ -33,7 +31,7 @@ public class RenameGraph {
 		stage.showAndWait();
 	}
 
-	public void submit(ActionEvent actionEvent) {
+	public void submit() {
 		data = inputText.getText();
 		if (data != null && !data.equals(""))
 			stage.close();

@@ -6,9 +6,9 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 
 public class StepTracker {
-	LinkedList<Graph> steps;
+	final LinkedList<Graph> steps;
 	ListIterator<Graph> tmpStep;
-	int maxStep;
+	final int maxStep;
 
 	public static class NoStepException extends RuntimeException {
 		NoStepException(String msg) {

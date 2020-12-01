@@ -1,8 +1,6 @@
 package ges.menu;
 
-import ges.editor.Editor;
 import ges.graph.Graph;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,10 +18,8 @@ public class OpenGraphTable {
 	@FXML
 	public TableView openTable;
 
-	File wd;
+	final File wd;
 	Stage stage;
-	Stage close;
-	Scene back;
 	Graph data;
 
 	public OpenGraphTable() throws IOException {
@@ -46,7 +42,7 @@ public class OpenGraphTable {
 	}
 
 	@FXML
-	public void initialize() throws IOException {
+	public void initialize() {
 
 		TableColumn nameColumn = new TableColumn("Name");
 		nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));

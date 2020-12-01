@@ -17,7 +17,7 @@ public class RmNodeTool extends Tool {
 	public void click(MouseEvent mouseEvent, Canvas canvas) {
 		Node hoover = graph.getNode(new Position(mouseEvent));
 		if (hoover != null) {
-			if (graph.rmNode(hoover, canvas)) {
+			if (graph.rmNode(hoover)) {
 				graph.refresh(canvas);
 				tracker.addStep(graph);
 			}
@@ -30,12 +30,12 @@ public class RmNodeTool extends Tool {
 	}
 
 	@Override
-	public void pushed(MouseEvent mouseEvent, Canvas canvas) {
+	public void pushed(MouseEvent mouseEvent) {
 
 	}
 
 	@Override
-	public void released(MouseEvent mouseEvent, Canvas canvas) {
+	public void released() {
 
 	}
 

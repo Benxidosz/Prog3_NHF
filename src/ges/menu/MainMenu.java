@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MainMenu {
-	Stage stage;
+	final Stage stage;
 
 	public MainMenu() throws IOException {
 		stage = new Stage();
@@ -18,7 +18,7 @@ public class MainMenu {
 
 		loader.setControllerFactory(c -> this);
 
-		Parent main = null;
+		Parent main;
 		main = loader.load();
 		Scene mainScene = new Scene(main);
 
@@ -34,7 +34,7 @@ public class MainMenu {
 
 		loader.setControllerFactory(c -> this);
 
-		Parent main = null;
+		Parent main;
 		main = loader.load();
 		Scene mainScene = new Scene(main);
 

@@ -11,27 +11,31 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 public class TableRow {
-	private File file;
+	private final File file;
 
 	TableRow(File file) {
 		this.file = file;
 	}
 
-	public String getName() {
-		return file.getName();
-	}
+// --Commented out by Inspection START (2020. 12. 01. 3:57):
+//	public String getName() {
+//		return file.getName();
+//	}
+// --Commented out by Inspection STOP (2020. 12. 01. 3:57)
 
-	public String getModified() throws IOException {
-		DateTimeFormatter dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
-		Path path = Paths.get(file.toURI());
-		BasicFileAttributes attr = Files.readAttributes(path, BasicFileAttributes.class);
-
-		LocalDateTime localDateTime = attr.lastModifiedTime()
-				.toInstant()
-				.atZone(ZoneId.systemDefault())
-				.toLocalDateTime();
-		return localDateTime.format(dateFormatter);
-	}
+// --Commented out by Inspection START (2020. 12. 01. 3:57):
+//	public String getModified() throws IOException {
+//		DateTimeFormatter dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
+//		Path path = Paths.get(file.toURI());
+//		BasicFileAttributes attr = Files.readAttributes(path, BasicFileAttributes.class);
+//
+//		LocalDateTime localDateTime = attr.lastModifiedTime()
+//				.toInstant()
+//				.atZone(ZoneId.systemDefault())
+//				.toLocalDateTime();
+//		return localDateTime.format(dateFormatter);
+//	}
+// --Commented out by Inspection STOP (2020. 12. 01. 3:57)
 
 	public File getFile() {
 		return file;

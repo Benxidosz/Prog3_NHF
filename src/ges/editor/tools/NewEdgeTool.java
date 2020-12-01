@@ -55,12 +55,12 @@ public class NewEdgeTool extends Tool {
 	}
 
 	@Override
-	public void pushed(MouseEvent mouseEvent, Canvas canvas) {
+	public void pushed(MouseEvent mouseEvent) {
 
 	}
 
 	@Override
-	public void released(MouseEvent mouseEvent, Canvas canvas) {
+	public void released() {
 
 	}
 

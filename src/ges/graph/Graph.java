@@ -1,18 +1,17 @@
 package ges.graph;
 
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.ComboBox;
 
 import java.io.*;
 import java.util.LinkedHashSet;
 
 public class Graph implements Serializable, Cloneable {
 	public int nodeRadius;
-	private StringBuilder tmpId;
+	private final StringBuilder tmpId;
 	public String title;
 
-	private LinkedHashSet<Node> nodes;
-	private LinkedHashSet<Edge> edges;
+	private final LinkedHashSet<Node> nodes;
+	private final LinkedHashSet<Edge> edges;
 
 	public Graph(int nodeRadius) {
 		title = "Untitled";
@@ -29,8 +28,8 @@ public class Graph implements Serializable, Cloneable {
 		edges = new LinkedHashSet<Edge>();
 		LinkedHashSet<Node> added = new LinkedHashSet<>();
 		for (Edge edge : graph.edges) {
-			Node n1 = null;
-			Node n2 = null;
+			Node n1;
+			Node n2;
 			if (!added.contains(edge.nodes[0])) {
 				n1 = new Node(this, edge.nodes[0]);
 				nodes.add(n1);
@@ -68,7 +67,7 @@ public class Graph implements Serializable, Cloneable {
 		}
 	}
 
-	public boolean addNode(Position pos, Canvas canvas, String chooser) {
+	public boolean addNode(Position pos, String chooser) {
 		boolean ret = nodes.add(new Node(this, tmpId.toString(), pos, chooser));
 
 		for (int i = tmpId.length() - 1; i >= 0; --i) {
@@ -86,7 +85,7 @@ public class Graph implements Serializable, Cloneable {
 		return ret;
 	}
 
-	public boolean rmNode(Node removable, Canvas canvas) {
+	public boolean rmNode(Node removable) {
 		boolean ret = nodes.remove(removable);
 
 		for (Node node : nodes) {

@@ -50,7 +50,7 @@ public class Editor {
 
 	Stage stage;
 	Graph graph;
-	StepTracker stepTracker;
+	final StepTracker stepTracker;
 
 	Button selectedButton;
 	Tool activeTool;
@@ -140,13 +140,13 @@ public class Editor {
 	@FXML
 	public void canvasMousePress(MouseEvent mouseEvent) {
 		if (activeTool != null)
-			activeTool.pushed(mouseEvent, myCanvas);
+			activeTool.pushed(mouseEvent);
 	}
 
 	@FXML
 	public void canvasMouseRelease(MouseEvent mouseEvent) {
 		if (activeTool != null)
-			activeTool.released(mouseEvent, myCanvas);
+			activeTool.released();
 	}
 
 	@FXML

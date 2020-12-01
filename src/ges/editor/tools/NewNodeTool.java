@@ -9,7 +9,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 
 public class NewNodeTool extends Tool {
-	ComboBox chooser;
+	final ComboBox chooser;
 
 	public NewNodeTool(Graph g, ComboBox chooser, StepTracker stepTracker) {
 		super(g, stepTracker);
@@ -18,7 +18,7 @@ public class NewNodeTool extends Tool {
 
 	@Override
 	public void click(MouseEvent mouseEvent, Canvas canvas) {
-		if (graph.addNode(new Position(mouseEvent), canvas, (String) chooser.getValue())) {
+		if (graph.addNode(new Position(mouseEvent), (String) chooser.getValue())) {
 			graph.refresh(canvas);
 			tracker.addStep(graph);
 		}
@@ -30,12 +30,12 @@ public class NewNodeTool extends Tool {
 	}
 
 	@Override
-	public void pushed(MouseEvent mouseEvent, Canvas canvas) {
+	public void pushed(MouseEvent mouseEvent) {
 
 	}
 
 	@Override
-	public void released(MouseEvent mouseEvent, Canvas canvas) {
+	public void released() {
 
 	}
 

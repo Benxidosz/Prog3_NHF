@@ -1,7 +1,6 @@
 package ges.graph;
 
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 
 import java.io.Serializable;
 

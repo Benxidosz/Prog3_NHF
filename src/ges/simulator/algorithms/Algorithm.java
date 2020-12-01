@@ -6,7 +6,7 @@ import javafx.scene.canvas.Canvas;
 
 
 public abstract class Algorithm {
-	protected Graph graph;
+	protected final Graph graph;
 
 	protected AlgoState state;
 	protected Canvas canvas;

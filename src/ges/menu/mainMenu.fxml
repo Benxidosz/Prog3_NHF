@@ -7,24 +7,22 @@
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
       prefWidth="400.0" scaleShape="false" stylesheets="@../../basicStyle.css" xmlns="http://javafx.com/javafx/11.0.1"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="ges.menu.MainMenu">
-    <children>
-        <Button fx:id="mainEditor" layoutX="100.0" layoutY="100.0" mnemonicParsing="false" onAction="#toEditorMenu"
-                prefHeight="100.0" prefWidth="200.0" styleClass="Button" text="Editor" textAlignment="CENTER">
-            <font>
-                <Font name="Garuda" size="32.0"/>
-            </font>
-        </Button>
-        <Button layoutX="100.0" layoutY="250.0" mnemonicParsing="false" onAction="#toSimulator" prefHeight="100.0"
-                prefWidth="200.0" styleClass="Button" text="Simulator" textAlignment="CENTER">
-            <font>
-                <Font name="Garuda" size="32.0"/>
-            </font>
-        </Button>
-        <Button fx:id="quitMenu" layoutX="100.0" layoutY="400.0" mnemonicParsing="false" onAction="#quit"
-                prefHeight="100.0" prefWidth="200.0" styleClass="Button" text="Quit">
-            <font>
-                <Font size="32.0"/>
-            </font>
-        </Button>
-   </children>
+    <Button fx:id="mainEditor" layoutX="100.0" layoutY="100.0" mnemonicParsing="false" onAction="#toEditorMenu"
+            prefHeight="100.0" prefWidth="200.0" styleClass="Button" text="Editor" textAlignment="CENTER">
+        <font>
+            <Font name="Garuda" size="32.0"/>
+        </font>
+    </Button>
+    <Button layoutX="100.0" layoutY="250.0" mnemonicParsing="false" onAction="#toSimulator" prefHeight="100.0"
+            prefWidth="200.0" styleClass="Button" text="Simulator" textAlignment="CENTER">
+        <font>
+            <Font name="Garuda" size="32.0"/>
+        </font>
+    </Button>
+    <Button fx:id="quitMenu" layoutX="100.0" layoutY="400.0" mnemonicParsing="false" onAction="#quit"
+            prefHeight="100.0" prefWidth="200.0" styleClass="Button" text="Quit">
+        <font>
+            <Font size="32.0"/>
+        </font>
+    </Button>
 </Pane>

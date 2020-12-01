@@ -5,8 +5,8 @@ import javafx.scene.input.MouseEvent;
 import java.io.Serializable;
 
 public class Position implements Serializable {
-	public double x;
-	public double y;
+	public final double x;
+	public final double y;
 
 	public Position(double x, double y) {
 		this.x = x;

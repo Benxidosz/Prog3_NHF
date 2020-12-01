@@ -15,14 +15,12 @@
     </top>
     <bottom>
         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="100.0" BorderPane.alignment="CENTER">
-            <children>
-                <Button mnemonicParsing="false" onAction="#back" prefWidth="100.0" styleClass="Button" text="Back"/>
-                <Button layoutX="180.0" layoutY="42.0" mnemonicParsing="false" onAction="#load" prefWidth="100.0"
-                        styleClass="Button" text="Load"/>
-            </children>
             <BorderPane.margin>
                 <Insets/>
             </BorderPane.margin>
+            <Button mnemonicParsing="false" onAction="#back" prefWidth="100.0" styleClass="Button" text="Back"/>
+            <Button layoutX="180.0" layoutY="42.0" mnemonicParsing="false" onAction="#load" prefWidth="100.0"
+                    styleClass="Button" text="Load"/>
         </HBox>
     </bottom>
 </BorderPane>

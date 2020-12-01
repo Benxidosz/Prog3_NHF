@@ -14,8 +14,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -28,8 +26,6 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Simulator {
 	@FXML
@@ -45,16 +41,11 @@ public class Simulator {
 	@FXML
 	public Button stepButton;
 
-	Graph graph;
+	final Graph graph;
 	Stage stage;
-	Button selectedButton;
-	File wd;
 	Node startNode;
 	Algorithm activeAlgo;
 	Timeline myTime;
-
-	long startTime;
-	boolean first;
 
 	double mx;
 	double my;
@@ -77,9 +68,6 @@ public class Simulator {
 		stage.setResizable(false);
 		stage.setTitle("Simulator - " + graph.title);
 		stage.show();
-
-		selectedButton = null;
-		wd = new File(System.getProperty("user.dir"));
 
 
 		graph.refresh(myCanvas);

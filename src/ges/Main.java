@@ -4,9 +4,6 @@ import ges.menu.MainMenu;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-
 public class Main extends Application {
 
 	@Override
