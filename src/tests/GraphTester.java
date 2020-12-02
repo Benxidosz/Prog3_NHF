@@ -1,5 +1,3 @@
-package tests;
-
 import ges.graph.Graph;
 import ges.graph.Position;
 import org.junit.Assert;

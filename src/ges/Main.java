@@ -5,7 +5,12 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-
+	/**
+	 * start the application.
+	 *
+	 * @param primaryStage
+	 * @throws Exception
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setResizable(false);
@@ -15,6 +20,11 @@ public class Main extends Application {
 	}
 
 
+	/**
+	 * Main method
+	 *
+	 * @param args running args
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}

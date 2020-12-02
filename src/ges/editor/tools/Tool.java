@@ -48,7 +48,8 @@ public abstract class Tool {
 	 * @param mouseEvent The Event data.
 	 * @param canvas     The Canvas, on which the click happened.
 	 */
-	public abstract void click(MouseEvent mouseEvent, Canvas canvas);
+	public void click(MouseEvent mouseEvent, Canvas canvas) {
+	}
 
 	/**
 	 * The mouseMoveEvent of the tool.
@@ -57,7 +58,8 @@ public abstract class Tool {
 	 * @param mouseEvent The Event data.
 	 * @param canvas     The Canvas, on which the move happened.
 	 */
-	public abstract void move(MouseEvent mouseEvent, Canvas canvas);
+	public void move(MouseEvent mouseEvent, Canvas canvas) {
+	}
 
 	/**
 	 * The mouseButtonPushEvent of the tool.
@@ -65,13 +67,15 @@ public abstract class Tool {
 	 *
 	 * @param mouseEvent The Event data.
 	 */
-	public abstract void pushed(MouseEvent mouseEvent);
+	public void pushed(MouseEvent mouseEvent) {
+	}
 
 	/**
 	 * The mouseButtonReleaseEvent of the tool.
 	 * It's called, when a mouseButton released on a Canvas.
 	 */
-	public abstract void released();
+	public void released() {
+	}
 
 	/**
 	 * The mouseDragEvent of the tool.
@@ -80,7 +84,8 @@ public abstract class Tool {
 	 * @param mouseEvent The Event data.
 	 * @param canvas     Thr Canvas, on which the drag happens.
 	 */
-	public abstract void drag(MouseEvent mouseEvent, Canvas canvas);
+	public void drag(MouseEvent mouseEvent, Canvas canvas) {
+	}
 
 	/**
 	 * The scrollEvent of the tool.
@@ -89,5 +94,12 @@ public abstract class Tool {
 	 * @param scrollEvent The Event data.
 	 * @param canvas      The Canvas, on which the scroll happens.
 	 */
-	public abstract void scroll(ScrollEvent scrollEvent, Canvas canvas);
+	public void scroll(ScrollEvent scrollEvent, Canvas canvas) {
+	}
+
+	/**
+	 * If have selected node, it deselect it.
+	 */
+	public void deselectNode() {
+	}
 }

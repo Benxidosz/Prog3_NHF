@@ -8,11 +8,29 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 
+/**
+ * A subclass of Tool. If this tool is selected, you can remove a Node from the graph.
+ */
 public class RmNodeTool extends Tool {
+
+	/**
+	 * The constructor of the NewNodeTool.
+	 * It set the selected to null.
+	 *
+	 * @param g           The value of the graph field.
+	 * @param stepTracker The value of the stepTracker field.
+	 */
 	public RmNodeTool(Graph g, StepTracker stepTracker) {
 		super(g, stepTracker);
 	}
 
+	/**
+	 * It get a Node from the graph by the position of the mouseCursor.
+	 * if the gotten Node not null, the method remove it from the graph.
+	 *
+	 * @param mouseEvent The Event data.
+	 * @param canvas     The Canvas, on which the click happened.
+	 */
 	@Override
 	public void click(MouseEvent mouseEvent, Canvas canvas) {
 		Node hoover = graph.getNode(new Position(mouseEvent));
@@ -22,30 +40,5 @@ public class RmNodeTool extends Tool {
 				tracker.addStep(graph);
 			}
 		}
-	}
-
-	@Override
-	public void move(MouseEvent mouseEvent, Canvas canvas) {
-
-	}
-
-	@Override
-	public void pushed(MouseEvent mouseEvent) {
-
-	}
-
-	@Override
-	public void released() {
-
-	}
-
-	@Override
-	public void drag(MouseEvent mouseEvent, Canvas canvas) {
-
-	}
-
-	@Override
-	public void scroll(ScrollEvent mouseEvent, Canvas canvas) {
-
 	}
 }

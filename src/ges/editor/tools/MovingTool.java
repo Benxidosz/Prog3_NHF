@@ -54,17 +54,6 @@ public class MovingTool extends Tool {
 	}
 
 	/**
-	 * It does nothing.
-	 *
-	 * @param mouseEvent The Event data.
-	 * @param canvas     The Canvas, on which the click happened.
-	 */
-	@Override
-	public void click(MouseEvent mouseEvent, Canvas canvas) {
-
-	}
-
-	/**
 	 * It set the mx and my.
 	 * It's called, when a mouse moved on a Canvas.
 	 *
@@ -137,6 +126,7 @@ public class MovingTool extends Tool {
 	 * of the scroll value (-1 or 1).
 	 * Than apply a pull/push effect to all Nodes. This effect pull all Nodes to the current position of
 	 * the mouseCursor, if the signature value of the scroll is 1, otherwise it push these from the mouseCursor.
+	 * It's called, when a scroll happens on a Canvas.
 	 *
 	 * @param scrollEvent The Event data.
 	 * @param canvas      The Canvas, on which the scroll happens.

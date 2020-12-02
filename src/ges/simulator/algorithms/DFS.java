@@ -6,12 +6,28 @@ import javafx.scene.canvas.Canvas;
 
 import java.util.HashMap;
 
+/**
+ * The Depth First Algorithm
+ */
 public class DFS extends Algorithm {
 	public DFS(Graph g) {
 		super(g);
 	}
 
+	/**
+	 * The next node, which should be process,
+	 */
 	Node next;
+
+	/**
+	 * the previous what was processed.
+	 */
+	Node previous;
+
+	/**
+	 * The previous Node's state.
+	 */
+	AlgoState prevState;
 
 	class DFSStep {
 		boolean d;
@@ -25,15 +41,23 @@ public class DFS extends Algorithm {
 
 	HashMap<Node, DFSStep> table;
 
+	/**
+	 * A dfs step.
+	 */
 	@Override
 	public void step() {
 		boolean hasNext = false;
 		next.setDrawState(AlgoState.onProgress);
+		if (previous != null)
+			previous.setDrawState(prevState);
 		for (Node nei : next.getNeighbours()) {
 			DFSStep tmpStep = table.get(nei);
 			if (!tmpStep.d) {
 				tmpStep.d = true;
 				tmpStep.m = next;
+				prevState = next.getDrawState();
+				previous = next;
+				next.setDrawState(AlgoState.focused);
 				next = nei;
 				hasNext = true;
 				break;
@@ -42,12 +66,20 @@ public class DFS extends Algorithm {
 		if (!hasNext) {
 			DFSStep tmpStep = table.get(next);
 			next.setDrawState(AlgoState.done);
-			if (tmpStep.m != null)
+			if (previous != null)
+				previous.setDrawState(prevState);
+
+			if (tmpStep.m != null) {
+				previous = next;
+				prevState = next.getDrawState();
+				next.setDrawState(AlgoState.focused);
 				next = tmpStep.m;
-			else {
+			} else {
 				boolean noNext = true;
 				for (Node node : graph.getNodes())
 					if (!table.get(node).d) {
+						previous = next;
+						prevState = next.getDrawState();
 						next = node;
 						table.get(node).d = true;
 						noNext = false;
@@ -68,6 +100,7 @@ public class DFS extends Algorithm {
 			table.put(node, new DFSStep());
 
 		next = start;
+		previous = null;
 		table.get(start).d = true;
 		this.canvas = canvas;
 		state = AlgoState.onProgress;

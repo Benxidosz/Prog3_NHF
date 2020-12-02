@@ -6,14 +6,26 @@ import javafx.scene.canvas.Canvas;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * The Breath First Algorithm.
+ */
 public class BFS extends Algorithm {
+	/**
+	 * Nodes, which have already processed.
+	 */
 	LinkedBlockingQueue<Node> processed;
+	/**
+	 * Nodes, which is under process.
+	 */
 	LinkedBlockingQueue<Node> processQueue;
 
 	public BFS(Graph g) {
 		super(g);
 	}
 
+	/**
+	 * Do a step of BFS.
+	 */
 	@Override
 	public void step() {
 		if (processQueue.isEmpty()) {
@@ -27,6 +39,7 @@ public class BFS extends Algorithm {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
+
 					nei.setDrawState(AlgoState.onProgress);
 				}
 			}
@@ -37,10 +50,17 @@ public class BFS extends Algorithm {
 				e.printStackTrace();
 			}
 			underProcess.setDrawState(AlgoState.done);
+
 			graph.refresh(canvas);
 		}
 	}
 
+	/**
+	 * Start the algo,
+	 *
+	 * @param canvas The canvas.
+	 * @param start  The starting Node.
+	 */
 	@Override
 	public void start(Canvas canvas, Node start) {
 		this.canvas = canvas;
