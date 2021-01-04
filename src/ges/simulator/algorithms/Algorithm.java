@@ -1,7 +1,7 @@
 package ges.simulator.algorithms;
 
 import ges.graph.Graph;
-import ges.graph.Node;
+import ges.graph.nodes.Node;
 import javafx.scene.canvas.Canvas;
 
 /**
@@ -12,6 +12,7 @@ public abstract class Algorithm {
 	 * The graph where the algo run.
 	 */
 	protected final Graph graph;
+	protected Graph visualGraph;
 
 	/**
 	 * The algoState with represent the progress of the algo.
@@ -25,6 +26,7 @@ public abstract class Algorithm {
 
 	Algorithm(Graph g) {
 		graph = g;
+		visualGraph = new Graph(g);
 		state = AlgoState.notStarted;
 	}
 
@@ -51,12 +53,15 @@ public abstract class Algorithm {
 	 */
 	public void reset() {
 		state = AlgoState.notStarted;
-		for (Node node : graph.getNodes())
-			node.setDrawState(AlgoState.notStarted);
+		visualGraph = new Graph(graph);
 		graph.refresh(canvas);
 	}
 
 	public AlgoState getState() {
 		return state;
+	}
+
+	public void graphRefresh() {
+		visualGraph = new Graph(graph);
 	}
 }

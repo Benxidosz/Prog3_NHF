@@ -2,7 +2,7 @@ package ges.simulator;
 
 import ges.editor.Editor;
 import ges.graph.Graph;
-import ges.graph.Node;
+import ges.graph.nodes.Node;
 import ges.graph.Position;
 import ges.menu.MainMenu;
 import ges.menu.OpenGraphTable;
@@ -24,7 +24,6 @@ import javafx.scene.input.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -168,14 +167,16 @@ public class Simulator {
 	 */
 	@FXML
 	public void canvasMouseMove(MouseEvent mouseEvent) {
-		Node hoover = graph.getNode(new Position(mouseEvent));
-		if (hoover != null && activeAlgo.getState().equals(AlgoState.notStarted)) {
-			hoover.hoover(myCanvas);
-		} else {
-			graph.refresh(myCanvas);
+		if (activeAlgo.getState() == AlgoState.notStarted) {
+			Node hoover = graph.getNode(new Position(mouseEvent));
+			if (hoover != null && activeAlgo.getState().equals(AlgoState.notStarted)) {
+				hoover.hoover(myCanvas);
+			} else {
+				graph.refresh(myCanvas);
+			}
+			mx = mouseEvent.getX();
+			my = mouseEvent.getY();
 		}
-		mx = mouseEvent.getX();
-		my = mouseEvent.getY();
 	}
 
 	/**
@@ -185,7 +186,7 @@ public class Simulator {
 	 */
 	@FXML
 	public void canvasScroll(ScrollEvent scrollEvent) {
-		if (scrollEvent.isControlDown()) {
+		if (scrollEvent.isControlDown() && activeAlgo.getState() == AlgoState.notStarted) {
 			if (scrollEvent.getDeltaY() != 0 && (graph.nodeRadius > 15 || scrollEvent.getDeltaY() > 0)) {
 				double scroll = (scrollEvent.getDeltaY() / Math.abs(scrollEvent.getDeltaY()));
 				graph.nodeRadius += scroll;
@@ -262,16 +263,18 @@ public class Simulator {
 	 */
 	@FXML
 	public void canvasDrag(MouseEvent mouseEvent) {
-		Node click = graph.getNode(new Position(mouseEvent));
-		if (click == null) {
-			for (Node node : graph.getNodes()) {
-				double x = node.getPosition().x;
-				double y = node.getPosition().y;
-				double mx = mouseEvent.getX();
-				double my = mouseEvent.getY();
-				node.setTmpPosition(new Position(x - (sx - mx), y - (sy - my)));
+		if (activeAlgo.getState() == AlgoState.notStarted) {
+			Node click = graph.getNode(new Position(mouseEvent));
+			if (click == null) {
+				for (Node node : graph.getNodes()) {
+					double x = node.getPosition().x;
+					double y = node.getPosition().y;
+					double mx = mouseEvent.getX();
+					double my = mouseEvent.getY();
+					node.setTmpPosition(new Position(x - (sx - mx), y - (sy - my)));
+				}
+				graph.refresh(myCanvas);
 			}
-			graph.refresh(myCanvas);
 		}
 	}
 
@@ -325,6 +328,7 @@ public class Simulator {
 	public void simulateStart() {
 		if (activeAlgo.getState().equals(AlgoState.notStarted)) {
 			if (startNode != null) {
+				activeAlgo.graphRefresh();
 				startButton.setText("Reset");
 				stepButton.setDisable(true);
 				activeAlgo.start(myCanvas, startNode);
@@ -357,6 +361,7 @@ public class Simulator {
 			activeAlgo.step();
 		else if (activeAlgo.getState().equals(AlgoState.notStarted))
 			if (startNode != null) {
+				activeAlgo.graphRefresh();
 				activeAlgo.start(myCanvas, startNode);
 				startButton.setText("Reset");
 			}

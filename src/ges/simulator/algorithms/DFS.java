@@ -1,7 +1,10 @@
 package ges.simulator.algorithms;
 
 import ges.graph.Graph;
-import ges.graph.Node;
+import ges.graph.nodes.DoneNode;
+import ges.graph.nodes.FocusedNode;
+import ges.graph.nodes.Node;
+import ges.graph.nodes.OnProgressNode;
 import javafx.scene.canvas.Canvas;
 
 import java.util.HashMap;
@@ -47,17 +50,18 @@ public class DFS extends Algorithm {
 	@Override
 	public void step() {
 		boolean hasNext = false;
-		next.setDrawState(AlgoState.onProgress);
+		Node switchNode = visualGraph.getNode(next.getId());
+		visualGraph.switchNode(switchNode, new OnProgressNode(switchNode));
 		if (previous != null)
-			previous.setDrawState(prevState);
+			visualGraph.getNode(previous.getId()).reset();
 		for (Node nei : next.getNeighbours()) {
 			DFSStep tmpStep = table.get(nei);
 			if (!tmpStep.d) {
 				tmpStep.d = true;
 				tmpStep.m = next;
-				prevState = next.getDrawState();
 				previous = next;
-				next.setDrawState(AlgoState.focused);
+				switchNode = visualGraph.getNode(next.getId());
+				visualGraph.switchNode(switchNode, new FocusedNode(switchNode));
 				next = nei;
 				hasNext = true;
 				break;
@@ -65,32 +69,31 @@ public class DFS extends Algorithm {
 		}
 		if (!hasNext) {
 			DFSStep tmpStep = table.get(next);
-			next.setDrawState(AlgoState.done);
-			if (previous != null)
-				previous.setDrawState(prevState);
+			switchNode = visualGraph.getNode(next.getId());
+			visualGraph.switchNode(switchNode, new DoneNode(switchNode));
 
+			switchNode = visualGraph.getNode(next.getId());
+			visualGraph.switchNode(switchNode, new FocusedNode(switchNode));
 			if (tmpStep.m != null) {
 				previous = next;
-				prevState = next.getDrawState();
-				next.setDrawState(AlgoState.focused);
 				next = tmpStep.m;
 			} else {
 				boolean noNext = true;
 				for (Node node : graph.getNodes())
 					if (!table.get(node).d) {
 						previous = next;
-						prevState = next.getDrawState();
 						next = node;
 						table.get(node).d = true;
 						noNext = false;
 						break;
 					}
 
-				if (noNext)
+				if (noNext) {
 					state = AlgoState.done;
+				}
 			}
 		}
-		graph.refresh(canvas);
+		visualGraph.refresh(canvas);
 	}
 
 	@Override

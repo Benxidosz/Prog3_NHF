@@ -1,7 +1,9 @@
 package ges.editor;
 
+import ges.editor.diary.Diary;
+import ges.editor.diary.logs.AllMoveLog;
 import ges.graph.Graph;
-import ges.graph.Node;
+import ges.graph.nodes.Node;
 import ges.graph.Position;
 import ges.menu.OpenGraphTable;
 import ges.menu.RenameGraph;
@@ -22,7 +24,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -97,7 +98,7 @@ public class Editor {
 	/**
 	 * The stepTracker, which track the changes.
 	 */
-	final StepTracker stepTracker;
+	final Diary diary;
 
 	/**
 	 * Reference to the last clicked toolButton (move, newNode, rmNode, newEdge, rmEdge)
@@ -124,7 +125,7 @@ public class Editor {
 	public Editor(Graph g) throws IOException {
 		//initialize the graph and stepTracker.
 		graph = g;
-		stepTracker = new StepTracker(graph, 5);
+		diary = new Diary();
 
 		//Load the fxml.
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("editor.fxml"));
@@ -184,15 +185,15 @@ public class Editor {
 		selectedButton = (Button) actionEvent.getSource();
 
 		if (selectedButton == editorNewNode) {
-			activeTool = new NewNodeTool(graph, editorNameSwitcher, stepTracker);
+			activeTool = new NewNodeTool(graph, editorNameSwitcher, diary);
 		} else if (selectedButton == editorRmNode) {
-			activeTool = new RmNodeTool(graph, stepTracker);
+			activeTool = new RmNodeTool(graph, diary);
 		} else if (selectedButton == editorMove) {
-			activeTool = new MovingTool(graph, stepTracker);
+			activeTool = new MovingTool(graph, diary);
 		} else if (selectedButton == editorNewEdge) {
-			activeTool = new NewEdgeTool(graph, stepTracker);
+			activeTool = new NewEdgeTool(graph, diary);
 		} else if (selectedButton == editorRmEdge) {
-			activeTool = new RmEdgeTool(graph, stepTracker);
+			activeTool = new RmEdgeTool(graph, diary);
 		} else {
 			activeTool = null;
 		}
@@ -294,21 +295,24 @@ public class Editor {
 		LinkedHashSet<Node> nodes = graph.getNodes();
 		double alfa = Math.toRadians(((double) 360 / (double) nodes.size()));
 
+		AllMoveLog log = new AllMoveLog(graph);
+
 		for (Node node : nodes) {
 			double s = Math.sin(alfa * i - Math.PI / 2) * r;
 			double c = Math.cos(alfa * i - Math.PI / 2) * r;
 
-			node.setPosition(new Position(cx, cy - r));
-
 			double xnew = c + cx;
 			double ynew = s + cy;
+			Position position = new Position(xnew, ynew);
 
-			node.setPosition(new Position(xnew, ynew));
+			log.addNodePos(node, node.getPosition(), position);
+
+			node.setPosition(position);
 			++i;
 		}
 
 		graph.refresh(myCanvas);
-		stepTracker.addStep(graph);
+		diary.addLog(log);
 	}
 
 	/**
@@ -441,8 +445,8 @@ public class Editor {
 	@FXML
 	public void editorUndo() {
 		try {
-			graph = stepTracker.undoStep();
-		} catch (StepTracker.NoStepException noStepException) {
+			diary.undoStep();
+		} catch (Diary.NoStepException noStepException) {
 			System.err.println(noStepException.getMessage());
 		}
 		graph.refresh(myCanvas);
@@ -457,8 +461,8 @@ public class Editor {
 	@FXML
 	public void editorRedo() {
 		try {
-			graph = stepTracker.redoStep();
-		} catch (StepTracker.NoStepException noStepException) {
+			diary.redoStep();
+		} catch (Diary.NoStepException noStepException) {
 			System.err.println(noStepException.getMessage());
 		}
 		graph.refresh(myCanvas);

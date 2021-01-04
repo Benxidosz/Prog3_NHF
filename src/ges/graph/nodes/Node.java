@@ -1,5 +1,8 @@
-package ges.graph;
+package ges.graph.nodes;
 
+import ges.graph.Graph;
+import ges.graph.Position;
+import ges.graph.Scheme;
 import ges.simulator.algorithms.AlgoState;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -15,7 +18,7 @@ public class Node extends Scheme {
 	/**
 	 * A list of the neighbour Nodes.
 	 */
-	private final LinkedHashSet<Node> neighbours;
+	protected final LinkedHashSet<Node> neighbours;
 
 	/**
 	 * The id of the Node.
@@ -25,7 +28,7 @@ public class Node extends Scheme {
 	/**
 	 * The node's graph.
 	 */
-	private final Graph myGraph;
+	protected final Graph myGraph;
 
 	/**
 	 * A state, it show it is selected by an algorithm/tool.
@@ -38,11 +41,6 @@ public class Node extends Scheme {
 	private String chooser;
 
 	/**
-	 * A state, which shows, the active algo process state.
-	 */
-	private AlgoState drawState;
-
-	/**
 	 * Constructor.
 	 *
 	 * @param graph   The graph what contains the Node.
@@ -50,7 +48,7 @@ public class Node extends Scheme {
 	 * @param pos     The position of the Node.
 	 * @param chooser The data switcher of the middle of the Node.
 	 */
-	Node(Graph graph, String id, Position pos, String chooser) {
+	public Node(Graph graph, String id, Position pos, String chooser) {
 		super(pos);
 
 		this.pos = pos;
@@ -58,7 +56,6 @@ public class Node extends Scheme {
 		this.myGraph = graph;
 		selected = false;
 		this.chooser = chooser;
-		drawState = AlgoState.notStarted;
 
 		neighbours = new LinkedHashSet<Node>();
 	}
@@ -69,9 +66,8 @@ public class Node extends Scheme {
 	 * @param graph Where the copy will belong.
 	 * @param node  The Node, which from the deepCopy made.
 	 */
-	Node(Graph graph, Node node) {
+	public Node(Graph graph, Node node) {
 		this(graph, node.id, new Position(node.pos), node.chooser);
-		drawState = AlgoState.notStarted;
 	}
 
 	/**
@@ -144,6 +140,13 @@ public class Node extends Scheme {
 		gc.strokeOval(x - myGraph.nodeRadius, y - myGraph.nodeRadius, myGraph.nodeRadius * 2, myGraph.nodeRadius * 2);
 	}
 
+	protected void setColor(GraphicsContext gc) {
+		if (selected)
+			gc.setFill(Color.RED);
+		else
+			gc.setFill(Color.WHITE);
+	}
+
 	/**
 	 * Draw the, whole Node.
 	 *
@@ -162,18 +165,7 @@ public class Node extends Scheme {
 			y = pos.y;
 		}
 
-		if (drawState.equals(AlgoState.notStarted))
-			if (selected)
-				gc.setFill(Color.RED);
-			else
-				gc.setFill(Color.WHITE);
-		else if (drawState.equals(AlgoState.onProgress))
-			gc.setFill(Color.LIGHTYELLOW);
-		else if (drawState.equals(AlgoState.focused))
-			gc.setFill(Color.YELLOW);
-		else if (drawState.equals(AlgoState.done))
-			gc.setFill(Color.GREEN);
-
+		setColor(gc);
 
 		gc.fillOval(x - myGraph.nodeRadius, y - myGraph.nodeRadius, myGraph.nodeRadius * 2, myGraph.nodeRadius * 2);
 
@@ -240,19 +232,7 @@ public class Node extends Scheme {
 		return myGraph;
 	}
 
-	/**
-	 * Set the draw state.
-	 * @param drawState The value.
-	 */
-	public void setDrawState(AlgoState drawState) {
-		this.drawState = drawState;
-	}
+	public void reset() {
 
-	/**
-	 * Get the draw state.
-	 * @return The value
-	 */
-	public AlgoState getDrawState() {
-		return drawState;
 	}
 }

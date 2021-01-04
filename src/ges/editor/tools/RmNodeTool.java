@@ -1,12 +1,12 @@
 package ges.editor.tools;
 
-import ges.editor.StepTracker;
+import ges.editor.diary.Diary;
+import ges.editor.diary.logs.RmNodeLog;
 import ges.graph.Graph;
-import ges.graph.Node;
+import ges.graph.nodes.Node;
 import ges.graph.Position;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 
 /**
  * A subclass of Tool. If this tool is selected, you can remove a Node from the graph.
@@ -17,12 +17,14 @@ public class RmNodeTool extends Tool {
 	 * The constructor of the NewNodeTool.
 	 * It set the selected to null.
 	 *
-	 * @param g           The value of the graph field.
-	 * @param stepTracker The value of the stepTracker field.
+	 * @param g     The value of the graph field.
+	 * @param diary The value of the stepTracker field.
 	 */
-	public RmNodeTool(Graph g, StepTracker stepTracker) {
-		super(g, stepTracker);
+	public RmNodeTool(Graph g, Diary diary) {
+		super(g, diary);
 	}
+
+	//TODO update docs
 
 	/**
 	 * It get a Node from the graph by the position of the mouseCursor.
@@ -37,7 +39,7 @@ public class RmNodeTool extends Tool {
 		if (hoover != null) {
 			if (graph.rmNode(hoover)) {
 				graph.refresh(canvas);
-				tracker.addStep(graph);
+				diary.addLog(new RmNodeLog(graph, hoover));
 			}
 		}
 	}

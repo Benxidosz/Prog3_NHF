@@ -1,5 +1,7 @@
 package ges.graph;
 
+import ges.graph.edges.Edge;
+import ges.graph.nodes.Node;
 import javafx.scene.canvas.Canvas;
 
 import java.io.*;
@@ -63,31 +65,32 @@ public class Graph implements Serializable {
 		for (Edge edge : graph.edges) {
 			Node n1;
 			Node n2;
-			if (!added.contains(edge.nodes[0])) {
-				n1 = new Node(this, edge.nodes[0]);
+
+			if (!added.contains(edge.getNode(0))) {
+				n1 = new Node(this, edge.getNode(0));
 				nodes.add(n1);
-				added.add(edge.nodes[0]);
+				added.add(edge.getNode(0));
 			} else {
-				n1 = getNode(edge.nodes[0].getId());
+				n1 = getNode(edge.getNode(0).getId());
 			}
 
-
-			if (!added.contains(edge.nodes[1])) {
-				n2 = new Node(this, edge.nodes[1]);
+			if (!added.contains(edge.getNode(1))) {
+				n2 = new Node(this, edge.getNode(1));
 				nodes.add(n2);
-				added.add(edge.nodes[1]);
+				added.add(edge.getNode(1));
 			} else {
-				n2 = getNode(edge.nodes[1].getId());
+				n2 = getNode(edge.getNode(1).getId());
 			}
 
 			if (n1 != null && n2 != null)
 				addEdge(n1, n2);
 		}
+
 		for (Node node : graph.nodes) {
 			if (!added.contains(node)) {
 				Node cpyNode = new Node(this, node);
 				nodes.add(cpyNode);
-				added.add(cpyNode);
+				added.add(node);
 			}
 		}
 		tmpId = new StringBuilder(graph.tmpId);
@@ -128,6 +131,14 @@ public class Graph implements Serializable {
 		}
 
 		return ret;
+	}
+
+	public boolean addNode(Node addable) {
+		for (Node nei : addable.getNeighbours()) {
+			nei.push(addable);
+			addEdge(addable, nei);
+		}
+		return nodes.add(addable);
 	}
 
 	/**
@@ -185,7 +196,7 @@ public class Graph implements Serializable {
 	 * @param n2 second end
 	 * @return The founded Edge, null if not find any.
 	 */
-	private Edge getEdge(Node n1, Node n2) {
+	public Edge getEdge(Node n1, Node n2) {
 		Edge searched = null;
 		for (Edge edge : edges) {
 			if (edge.nodeInEdge(n1) && edge.nodeInEdge(n2)) {
@@ -223,6 +234,16 @@ public class Graph implements Serializable {
 	}
 
 	/**
+	 * Add a given edge.
+	 *
+	 * @param edge The given edge.
+	 * @return If it was a success.
+	 */
+	public boolean addEdge(Edge edge) {
+		return edges.add(edge);
+	}
+
+	/**
 	 * Remove an edge, with two given nodes.
 	 *
 	 * @param n1 First.
@@ -241,16 +262,6 @@ public class Graph implements Serializable {
 			ret = ret && n2.pop(n1);
 		}
 		return ret;
-	}
-
-	/**
-	 * Add a given edge.
-	 *
-	 * @param edge The given edge.
-	 * @return If it was a success.
-	 */
-	public boolean addEdge(Edge edge) {
-		return edges.add(edge);
 	}
 
 	/**
@@ -338,5 +349,21 @@ public class Graph implements Serializable {
 			edge.draw(canvas);
 		for (Node node : nodes)
 			node.draw(canvas);
+	}
+
+	public void switchNode(Node from, Node to) {
+		if (nodes.contains(from)) {
+			for (Node nei : from.getNeighbours())
+				to.push(nei);
+			addNode(to);
+			rmNode(from);
+		}
+	}
+
+	public void switchEdge(Edge from, Edge to) {
+		if (edges.contains(from)) {
+			addEdge(to);
+			rmEdge(from);
+		}
 	}
 }

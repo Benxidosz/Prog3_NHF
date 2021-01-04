@@ -1,7 +1,9 @@
 package ges.editor.tools;
 
-import ges.editor.StepTracker;
+import ges.editor.diary.Diary;
+import ges.editor.diary.logs.NewNodeLog;
 import ges.graph.Graph;
+import ges.graph.nodes.Node;
 import ges.graph.Position;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ComboBox;
@@ -17,18 +19,22 @@ public class NewNodeTool extends Tool {
 	 */
 	final ComboBox chooser;
 
+	//TODO update docs
+
 	/**
 	 * The constructor of the NewNodeTool.
 	 * It set the selected to null.
 	 *
-	 * @param g           The value of the graph field.
-	 * @param chooser     The value of the chooser field.
-	 * @param stepTracker The value of the stepTracker field.
+	 * @param g       The value of the graph field.
+	 * @param chooser The value of the chooser field.
+	 * @param diary   The value of the stepTracker field.
 	 */
-	public NewNodeTool(Graph g, ComboBox chooser, StepTracker stepTracker) {
-		super(g, stepTracker);
+	public NewNodeTool(Graph g, ComboBox chooser, Diary diary) {
+		super(g, diary);
 		this.chooser = chooser;
 	}
+
+	//TODO update docs
 
 	/**
 	 * Create a newNode to the position of the mouseCursor and add to the graph.
@@ -38,9 +44,11 @@ public class NewNodeTool extends Tool {
 	 */
 	@Override
 	public void click(MouseEvent mouseEvent, Canvas canvas) {
-		if (graph.addNode(new Position(mouseEvent), (String) chooser.getValue())) {
+		Position mousePos = new Position(mouseEvent);
+		if (graph.addNode(mousePos, (String) chooser.getValue())) {
 			graph.refresh(canvas);
-			tracker.addStep(graph);
+			Node added = graph.getNode(mousePos);
+			diary.addLog(new NewNodeLog(graph, added));
 		}
 	}
 }

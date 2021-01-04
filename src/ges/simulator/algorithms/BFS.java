@@ -1,7 +1,11 @@
 package ges.simulator.algorithms;
 
 import ges.graph.Graph;
-import ges.graph.Node;
+import ges.graph.edges.Edge;
+import ges.graph.edges.FocusedEdge;
+import ges.graph.nodes.DoneNode;
+import ges.graph.nodes.Node;
+import ges.graph.nodes.OnProgressNode;
 import javafx.scene.canvas.Canvas;
 
 import java.util.concurrent.LinkedBlockingQueue;
@@ -32,6 +36,7 @@ public class BFS extends Algorithm {
 			state = AlgoState.done;
 		} else {
 			Node underProcess = processQueue.poll();
+			Node underInVisual = visualGraph.getNode(underProcess.getId());
 			for (Node nei : underProcess.getNeighbours()) {
 				if (!(processed.contains(nei) || processQueue.contains(nei))) {
 					try {
@@ -40,7 +45,11 @@ public class BFS extends Algorithm {
 						e.printStackTrace();
 					}
 
-					nei.setDrawState(AlgoState.onProgress);
+					Node switchNode = visualGraph.getNode(nei.getId());
+					Edge switchEdge = visualGraph.getEdge(switchNode, underInVisual);
+					if (switchEdge != null)
+						visualGraph.switchEdge(switchEdge, new FocusedEdge(switchNode, underInVisual));
+					visualGraph.switchNode(switchNode, new OnProgressNode(switchNode));
 				}
 			}
 
@@ -49,9 +58,11 @@ public class BFS extends Algorithm {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			underProcess.setDrawState(AlgoState.done);
 
-			graph.refresh(canvas);
+			Node switchNode = visualGraph.getNode(underProcess.getId());
+			visualGraph.switchNode(switchNode, new DoneNode(switchNode));
+
+			visualGraph.refresh(canvas);
 		}
 	}
 
@@ -69,11 +80,12 @@ public class BFS extends Algorithm {
 		processQueue = new LinkedBlockingQueue<>();
 		try {
 			processQueue.put(start);
-			start.setDrawState(AlgoState.onProgress);
+			Node switchNode = visualGraph.getNode(start.getId());
+			visualGraph.switchNode(switchNode, new OnProgressNode(switchNode));
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		graph.refresh(canvas);
+		visualGraph.refresh(canvas);
 	}
 
 	@Override

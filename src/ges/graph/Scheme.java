@@ -1,6 +1,8 @@
 package ges.graph;
 
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 import java.io.Serializable;
 
@@ -24,7 +26,7 @@ public abstract class Scheme implements Serializable {
 	 *
 	 * @param pos The value of the position.
 	 */
-	Scheme(Position pos) {
+	public Scheme(Position pos) {
 		this.pos = pos;
 	}
 
@@ -65,6 +67,8 @@ public abstract class Scheme implements Serializable {
 		return pos;
 	}
 
+	protected abstract void setColor(GraphicsContext gc);
+
 	/**
 	 * The draw method.
 	 *
@@ -79,6 +83,10 @@ public abstract class Scheme implements Serializable {
 	 */
 	public void hoover(Canvas canvas) {
 
+	}
+
+	public Position getTmpPos() {
+		return tmpPos;
 	}
 
 	/**

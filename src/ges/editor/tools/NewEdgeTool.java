@@ -1,9 +1,10 @@
 package ges.editor.tools;
 
-import ges.editor.StepTracker;
-import ges.graph.Edge;
+import ges.editor.diary.Diary;
+import ges.editor.diary.logs.NewEdgeLog;
+import ges.graph.edges.Edge;
 import ges.graph.Graph;
-import ges.graph.Node;
+import ges.graph.nodes.Node;
 import ges.graph.Position;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseEvent;
@@ -22,13 +23,15 @@ public class NewEdgeTool extends Tool {
 	 * The constructor of the NewEdgeTool.
 	 * It set the selected to null.
 	 *
-	 * @param g           The value of the graph field.
-	 * @param stepTracker The value of the tracker field.
+	 * @param g     The value of the graph field.
+	 * @param diary The value of the tracker field.
 	 */
-	public NewEdgeTool(Graph g, StepTracker stepTracker) {
-		super(g, stepTracker);
+	public NewEdgeTool(Graph g, Diary diary) {
+		super(g, diary);
 		selectedNode = null;
 	}
+
+	//TODO update docs
 
 	/**
 	 * It get a Node from the graph by the mouse position, if it isn't null:
@@ -55,9 +58,9 @@ public class NewEdgeTool extends Tool {
 					selectedNode = null;
 				} else {
 					graph.addEdge(selectedNode, select);
+					diary.addLog(new NewEdgeLog(graph, selectedNode, select));
 					selectedNode.selected(false);
 					selectedNode = null;
-					tracker.addStep(graph);
 				}
 			}
 		} else if (selectedNode != null) {

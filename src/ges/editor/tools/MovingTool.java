@@ -1,8 +1,10 @@
 package ges.editor.tools;
 
-import ges.editor.StepTracker;
+import ges.editor.diary.Diary;
+import ges.editor.diary.logs.AllMoveLog;
+import ges.editor.diary.logs.MoveLog;
 import ges.graph.Graph;
-import ges.graph.Node;
+import ges.graph.nodes.Node;
 import ges.graph.Position;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseEvent;
@@ -48,7 +50,7 @@ public class MovingTool extends Tool {
 	 * @param g       The value of the graph field.
 	 * @param tracker The value of the tracker field.
 	 */
-	public MovingTool(Graph g, StepTracker tracker) {
+	public MovingTool(Graph g, Diary tracker) {
 		super(g, tracker);
 		selected = null;
 	}
@@ -79,6 +81,8 @@ public class MovingTool extends Tool {
 		sy = mouseEvent.getY();
 	}
 
+	//TODO update docs
+
 	/**
 	 * If selected is null: Verify all of the node's position.
 	 * And every called, it set selected to null.
@@ -87,12 +91,20 @@ public class MovingTool extends Tool {
 	 */
 	@Override
 	public void released() {
-		if (selected == null)
+		if (selected != null) {
+			diary.addLog(new MoveLog(graph, selected, selected.getPosition(), selected.getTmpPos()));
+			selected.verifyPos();
+		} else {
+			AllMoveLog log = new AllMoveLog(graph);
+
 			for (Node node : graph.getNodes()) {
+				log.addNodePos(node, node.getPosition(), node.getTmpPos());
 				node.verifyPos();
 			}
+
+			diary.addLog(log);
+		}
 		selected = null;
-		tracker.addStep(graph);
 	}
 
 	/**
@@ -107,7 +119,7 @@ public class MovingTool extends Tool {
 	@Override
 	public void drag(MouseEvent mouseEvent, Canvas canvas) {
 		if (selected != null) {
-			selected.setPosition(new Position(mouseEvent));
+			selected.setTmpPosition(new Position(mouseEvent));
 			graph.refresh(canvas);
 		} else {
 			for (Node node : graph.getNodes()) {
@@ -143,6 +155,7 @@ public class MovingTool extends Tool {
 
 					node.setPosition(new Position(x - scroll * (mx - x) / graph.nodeRadius, y - scroll * (my - y) / graph.nodeRadius));
 				}
+				diary.scroll(new Position(mx, my), scrollEvent, canvas);
 				graph.refresh(canvas);
 			}
 		}

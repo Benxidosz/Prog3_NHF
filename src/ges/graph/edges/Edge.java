@@ -1,6 +1,12 @@
-package ges.graph;
+package ges.graph.edges;
 
+import ges.graph.Position;
+import ges.graph.Scheme;
+import ges.graph.nodes.Node;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
 
 /**
  * A subclass of the Scheme. It is represent an Edge.
@@ -10,7 +16,7 @@ public class Edge extends Scheme {
 	/**
 	 * An array of the node, where to the Edge belongs. (Always 2).
 	 */
-	final Node[] nodes;
+	private final Node[] nodes;
 
 	/**
 	 * Edge's constructor from two node.
@@ -18,7 +24,7 @@ public class Edge extends Scheme {
 	 * @param n1 First node.
 	 * @param n2 Second node.
 	 */
-	Edge(Node n1, Node n2) {
+	public Edge(Node n1, Node n2) {
 		super(new Position(Math.sqrt(Math.pow(n1.getPosition().x - n2.getPosition().x, 2)), Math.sqrt(Math.pow(n1.getPosition().y - n2.getPosition().y, 2))));
 		nodes = new Node[2];
 		nodes[0] = n1;
@@ -38,6 +44,11 @@ public class Edge extends Scheme {
 		nodes[1] = new Node(null, "", pos, null);
 	}
 
+	@Override
+	protected void setColor(GraphicsContext gc) {
+		gc.setStroke(Color.BLACK);
+	}
+
 	/**
 	 * Draw a line between the two nodes center (position).
 	 *
@@ -49,21 +60,26 @@ public class Edge extends Scheme {
 		double y1;
 		double x2;
 		double y2;
-		if (nodes[0].tmpPos != null) {
-			x1 = nodes[0].tmpPos.x;
-			y1 = nodes[0].tmpPos.y;
+		if (nodes[0].getTmpPos() != null) {
+			x1 = nodes[0].getTmpPos().x;
+			y1 = nodes[0].getTmpPos().y;
 		} else {
-			x1 = nodes[0].pos.x;
-			y1 = nodes[0].pos.y;
+			x1 = nodes[0].getPosition().x;
+			y1 = nodes[0].getPosition().y;
 		}
-		if (nodes[1].tmpPos != null) {
-			x2 = nodes[1].tmpPos.x;
-			y2 = nodes[1].tmpPos.y;
+		if (nodes[1].getTmpPos() != null) {
+			x2 = nodes[1].getTmpPos().x;
+			y2 = nodes[1].getTmpPos().y;
 		} else {
-			x2 = nodes[1].pos.x;
-			y2 = nodes[1].pos.y;
+			x2 = nodes[1].getPosition().x;
+			y2 = nodes[1].getPosition().y;
 		}
-		canvas.getGraphicsContext2D().strokeLine(x1, y1, x2, y2);
+
+		GraphicsContext gc = canvas.getGraphicsContext2D();
+
+		setColor(gc);
+
+		gc.strokeLine(x1, y1, x2, y2);
 
 	}
 
@@ -78,10 +94,10 @@ public class Edge extends Scheme {
 	@Override
 	public String export(double w, double h) {
 		int nodeRadius = nodes[0].getGraph().nodeRadius;
-		double x1 = nodes[0].pos.x - w + nodeRadius + 5;
-		double x2 = nodes[1].pos.x - w + nodeRadius + 5;
-		double y1 = nodes[0].pos.y - h + nodeRadius + 5;
-		double y2 = nodes[1].pos.y - h + nodeRadius + 5;
+		double x1 = nodes[0].getPosition().x - w + nodeRadius + 5;
+		double x2 = nodes[1].getPosition().x - w + nodeRadius + 5;
+		double y1 = nodes[0].getPosition().y - h + nodeRadius + 5;
+		double y2 = nodes[1].getPosition().y - h + nodeRadius + 5;
 		return "\t<line x1=\"" + x1 + "\" y1=\"" + y1 + "\" x2=\"" + x2 + "\" y2=\"" + y2 + "\" style=\"stroke:rgb(0,0,0);stroke-width:2\" />";
 	}
 
@@ -95,4 +111,7 @@ public class Edge extends Scheme {
 		return nodes[0] == node || nodes[1] == node;
 	}
 
+	public Node getNode(int i) {
+		return nodes[i];
+	}
 }
