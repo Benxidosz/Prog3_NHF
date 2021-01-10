@@ -352,11 +352,13 @@ public class Simulator {
 	@FXML
 	public void simulateStep() {
 		if (activeAlgo.getState().equals(AlgoState.done)) {
-			activeAlgo.reset();
 			if (myTime != null)
 				myTime.stop();
-			startButton.setText("Start");
-			stepButton.setDisable(false);
+			if (myTime == null) {
+				activeAlgo.reset();
+				startButton.setText("Start");
+				stepButton.setDisable(false);
+			}
 		} else if (activeAlgo.getState().equals(AlgoState.onProgress))
 			activeAlgo.step();
 		else if (activeAlgo.getState().equals(AlgoState.notStarted))

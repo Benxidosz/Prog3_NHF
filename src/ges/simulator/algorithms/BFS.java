@@ -1,13 +1,14 @@
 package ges.simulator.algorithms;
 
 import ges.graph.Graph;
+import ges.graph.edges.DoneEdge;
 import ges.graph.edges.Edge;
-import ges.graph.edges.FocusedEdge;
-import ges.graph.nodes.DoneNode;
+import ges.graph.nodes.BFSDoneNode;
 import ges.graph.nodes.Node;
 import ges.graph.nodes.OnProgressNode;
 import javafx.scene.canvas.Canvas;
 
+import java.util.HashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -23,6 +24,22 @@ public class BFS extends Algorithm {
 	 */
 	LinkedBlockingQueue<Node> processQueue;
 
+	class BFSStep {
+		final int distance;
+		final int index;
+		final String prev;
+
+		BFSStep(int distance, int index, String prev) {
+			this.distance = distance;
+			this.index = index;
+			this.prev = prev;
+		}
+	}
+
+	HashMap<String, BFSStep> distances;
+
+	int index;
+
 	public BFS(Graph g) {
 		super(g);
 	}
@@ -37,6 +54,7 @@ public class BFS extends Algorithm {
 		} else {
 			Node underProcess = processQueue.poll();
 			Node underInVisual = visualGraph.getNode(underProcess.getId());
+
 			for (Node nei : underProcess.getNeighbours()) {
 				if (!(processed.contains(nei) || processQueue.contains(nei))) {
 					try {
@@ -45,11 +63,16 @@ public class BFS extends Algorithm {
 						e.printStackTrace();
 					}
 
+					distances.put(nei.getId(), new BFSStep(distances.get(underProcess.getId()).distance + 1, index, underProcess.getId()));
+					index++;
+
 					Node switchNode = visualGraph.getNode(nei.getId());
-					Edge switchEdge = visualGraph.getEdge(switchNode, underInVisual);
+					Node newNode = new OnProgressNode(switchNode);
+					visualGraph.switchNode(switchNode, newNode);
+
+					Edge switchEdge = visualGraph.getEdge(newNode, underInVisual);
 					if (switchEdge != null)
-						visualGraph.switchEdge(switchEdge, new FocusedEdge(switchNode, underInVisual));
-					visualGraph.switchNode(switchNode, new OnProgressNode(switchNode));
+						visualGraph.switchEdge(switchEdge, new DoneEdge(newNode, underInVisual));
 				}
 			}
 
@@ -60,7 +83,8 @@ public class BFS extends Algorithm {
 			}
 
 			Node switchNode = visualGraph.getNode(underProcess.getId());
-			visualGraph.switchNode(switchNode, new DoneNode(switchNode));
+			BFSStep underProcessBFS = distances.get(underProcess.getId());
+			visualGraph.switchNode(switchNode, new BFSDoneNode(switchNode, underProcessBFS.distance, underProcessBFS.index, underProcessBFS.prev));
 
 			visualGraph.refresh(canvas);
 		}
@@ -78,8 +102,12 @@ public class BFS extends Algorithm {
 		state = AlgoState.onProgress;
 		processed = new LinkedBlockingQueue<>();
 		processQueue = new LinkedBlockingQueue<>();
+		distances = new HashMap<>();
+		index = 0;
 		try {
 			processQueue.put(start);
+			distances.put(start.getId(), new BFSStep(0, index, ""));
+			index++;
 			Node switchNode = visualGraph.getNode(start.getId());
 			visualGraph.switchNode(switchNode, new OnProgressNode(switchNode));
 		} catch (InterruptedException e) {

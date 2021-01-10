@@ -12,5 +12,6 @@ public class DoneEdge extends Edge {
 	@Override
 	protected void setColor(GraphicsContext gc) {
 		gc.setStroke(Color.GREEN);
+		gc.setLineWidth(gc.getLineWidth() * 5);
 	}
 }

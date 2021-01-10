@@ -147,6 +147,13 @@ public class Node extends Scheme {
 			gc.setFill(Color.WHITE);
 	}
 
+	protected void drawText(GraphicsContext gc, double x, double y) {
+		if (chooser.equals("Id"))
+			gc.strokeText(id, x, y, myGraph.nodeRadius * 2);
+		else
+			gc.strokeText(String.valueOf(getDim()), x, y, myGraph.nodeRadius * 2);
+	}
+
 	/**
 	 * Draw the, whole Node.
 	 *
@@ -171,10 +178,7 @@ public class Node extends Scheme {
 
 		drawStroke(x, y, gc);
 
-		if (chooser.equals("Id"))
-			gc.strokeText(id, x, y, myGraph.nodeRadius * 2);
-		else
-			gc.strokeText(String.valueOf(getDim()), x, y, myGraph.nodeRadius * 2);
+		drawText(gc, x, y);
 	}
 
 	/**

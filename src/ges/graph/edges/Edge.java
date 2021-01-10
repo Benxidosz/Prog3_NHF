@@ -3,6 +3,7 @@ package ges.graph.edges;
 import ges.graph.Position;
 import ges.graph.Scheme;
 import ges.graph.nodes.Node;
+import ges.graph.nodes.OnProgressNode;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -32,7 +33,7 @@ public class Edge extends Scheme {
 	}
 
 	/**
-	 * Edge's constructor from a node and from a position.
+	 * Edge's constructor from anode and from a position.
 	 *
 	 * @param n1  First node.
 	 * @param pos The position.
@@ -76,11 +77,14 @@ public class Edge extends Scheme {
 		}
 
 		GraphicsContext gc = canvas.getGraphicsContext2D();
+		double originalWidth = gc.getLineWidth();
 
 		setColor(gc);
 
 		gc.strokeLine(x1, y1, x2, y2);
 
+		gc.setStroke(Color.BLACK);
+		gc.setLineWidth(originalWidth);
 	}
 
 	/**
@@ -113,5 +117,9 @@ public class Edge extends Scheme {
 
 	public Node getNode(int i) {
 		return nodes[i];
+	}
+
+	public Node[] getNodes() {
+		return nodes;
 	}
 }

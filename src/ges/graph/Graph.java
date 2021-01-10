@@ -1,6 +1,7 @@
 package ges.graph;
 
 import ges.graph.edges.Edge;
+import ges.graph.edges.FocusedEdge;
 import ges.graph.nodes.Node;
 import javafx.scene.canvas.Canvas;
 
@@ -214,7 +215,7 @@ public class Graph implements Serializable {
 	 * @param n2 Second
 	 * @return If it is a success.
 	 */
-	public boolean addEdge(Node n1, Node n2) {
+	public <EdgeType> boolean addEdge(Node n1, Node n2) {
 		Edge newEdge = getEdge(n1, n2);
 		boolean ret;
 		if (newEdge != null) {
@@ -355,15 +356,24 @@ public class Graph implements Serializable {
 		if (nodes.contains(from)) {
 			for (Node nei : from.getNeighbours())
 				to.push(nei);
-			addNode(to);
-			rmNode(from);
+			for (Edge edge : edges) {
+				if (edge.nodeInEdge(from)) {
+					if (edge.getNode(0) == from) {
+						edge.getNodes()[0] = to;
+					} else {
+						edge.getNodes()[1] = to;
+					}
+				}
+			}
+			nodes.remove(from);
+			nodes.add(to);
 		}
 	}
 
 	public void switchEdge(Edge from, Edge to) {
 		if (edges.contains(from)) {
-			addEdge(to);
 			rmEdge(from);
+			addEdge(to);
 		}
 	}
 }
