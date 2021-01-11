@@ -3,7 +3,6 @@ package ges.graph.nodes;
 import ges.graph.Graph;
 import ges.graph.Position;
 import ges.graph.Scheme;
-import ges.simulator.algorithms.AlgoState;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -57,7 +56,7 @@ public class Node extends Scheme {
 		selected = false;
 		this.chooser = chooser;
 
-		neighbours = new LinkedHashSet<Node>();
+		neighbours = new LinkedHashSet<>();
 	}
 
 	/**

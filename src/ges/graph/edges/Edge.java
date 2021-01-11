@@ -17,7 +17,7 @@ public class Edge extends Scheme {
 	/**
 	 * An array of the node, where to the Edge belongs. (Always 2).
 	 */
-	private final Node[] nodes;
+	protected final Node[] nodes;
 
 	/**
 	 * Edge's constructor from two node.

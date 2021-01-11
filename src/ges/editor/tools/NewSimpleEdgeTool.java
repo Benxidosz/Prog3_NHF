@@ -12,7 +12,7 @@ import javafx.scene.input.MouseEvent;
 /**
  * A subclass of Tool. If this tool is selected, you can create new Edges to the graph.
  */
-public class NewEdgeTool extends Tool {
+public class NewSimpleEdgeTool extends Tool {
 
 	/**
 	 * It contains a Node, which was selected by clicking it.
@@ -26,7 +26,7 @@ public class NewEdgeTool extends Tool {
 	 * @param g     The value of the graph field.
 	 * @param diary The value of the tracker field.
 	 */
-	public NewEdgeTool(Graph g, Diary diary) {
+	public NewSimpleEdgeTool(Graph g, Diary diary) {
 		super(g, diary);
 		selectedNode = null;
 	}

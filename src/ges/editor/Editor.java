@@ -61,8 +61,6 @@ public class Editor {
 	 * It is a reference to the button of the fxml, which has editorNewEdge id.
 	 * If it pressed, a NewEdgeTool will be set as active tool.
 	 */
-	@FXML
-	public Button editorNewEdge;
 	/**
 	 * A toolButton.
 	 * It is a reference to the button of the fxml, which has editorRmEdge id.
@@ -84,6 +82,9 @@ public class Editor {
 	 */
 	@FXML
 	public Canvas myCanvas;
+
+	@FXML
+	public Button editorNewEdge;
 
 	/**
 	 * The stage, where the things appear.
@@ -191,7 +192,7 @@ public class Editor {
 		} else if (selectedButton == editorMove) {
 			activeTool = new MovingTool(graph, diary);
 		} else if (selectedButton == editorNewEdge) {
-			activeTool = new NewEdgeTool(graph, diary);
+			activeTool = new NewSimpleEdgeTool(graph, diary);
 		} else if (selectedButton == editorRmEdge) {
 			activeTool = new RmEdgeTool(graph, diary);
 		} else {

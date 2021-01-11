@@ -1,7 +1,6 @@
 package ges.graph.nodes;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.text.Font;
 
 public class BFSDoneNode extends DoneNode {
 	private final int distance;

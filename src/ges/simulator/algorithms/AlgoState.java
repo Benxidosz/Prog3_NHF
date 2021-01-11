@@ -6,6 +6,6 @@ package ges.simulator.algorithms;
 public enum AlgoState {
 	notStarted,
 	onProgress,
-	focused,
+	waitForReset,
 	done
 }

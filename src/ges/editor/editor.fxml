@@ -39,10 +39,9 @@
             </padding>
             <Button fx:id="editorMove" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                     mnemonicParsing="false" onAction="#toolSelect" styleClass="Button" text="Move"/>
-            <Button fx:id="editorRmNode" alignment="CENTER" contentDisplay="CENTER"
-                    maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                    onAction="#toolSelect" styleClass="Button" text="Remove Node" textAlignment="CENTER"
-                    wrapText="true" GridPane.rowIndex="2"/>
+            <Button fx:id="editorRmNode" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308"
+                    maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#toolSelect" styleClass="Button"
+                    text="Remove Node" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2"/>
             <Button fx:id="editorNewNode" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                     mnemonicParsing="false" onAction="#toolSelect" styleClass="Button" text="New Node"
                     GridPane.rowIndex="1"/>
@@ -62,10 +61,9 @@
     </left>
     <center>
         <Pane fx:id="canvasPane" BorderPane.alignment="CENTER">
-            <Canvas fx:id="myCanvas" height="695.0" onMouseClicked="#canvasMouseClick"
-                    onMouseDragged="#canvasMouseDrag" onMouseMoved="#canvasMouseMove"
-                    onMousePressed="#canvasMousePress" onMouseReleased="#canvasMouseRelease"
-                    onScroll="#canvasScroll" width="955.0"/>
+            <Canvas fx:id="myCanvas" height="695.0" onMouseClicked="#canvasMouseClick" onMouseDragged="#canvasMouseDrag"
+                    onMouseMoved="#canvasMouseMove" onMousePressed="#canvasMousePress"
+                    onMouseReleased="#canvasMouseRelease" onScroll="#canvasScroll" width="955.0"/>
         </Pane>
     </center>
     <top>

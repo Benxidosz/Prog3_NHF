@@ -359,7 +359,7 @@ public class Simulator {
 				startButton.setText("Start");
 				stepButton.setDisable(false);
 			}
-		} else if (activeAlgo.getState().equals(AlgoState.onProgress))
+		} else if (activeAlgo.getState().equals(AlgoState.onProgress) || activeAlgo.getState().equals(AlgoState.waitForReset))
 			activeAlgo.step();
 		else if (activeAlgo.getState().equals(AlgoState.notStarted))
 			if (startNode != null) {
