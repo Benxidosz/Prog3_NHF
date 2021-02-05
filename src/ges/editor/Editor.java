@@ -153,7 +153,6 @@ public class Editor {
 			refreshTitle();
 		}
 
-		//refresh the graph so it shown on the myCanvas.
 		graph.refresh(myCanvas);
 	}
 

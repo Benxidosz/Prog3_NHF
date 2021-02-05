@@ -14,6 +14,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -71,6 +72,11 @@ public class Simulator {
 	 */
 	final Graph graph;
 
+	@FXML
+	public Button multiButton;
+
+	boolean pause = false;
+
 	/**
 	 * The window's stage.
 	 */
@@ -122,7 +128,6 @@ public class Simulator {
 		stage.setTitle("Simulator - " + graph.title);
 		stage.show();
 
-
 		graph.refresh(myCanvas);
 	}
 
@@ -138,6 +143,7 @@ public class Simulator {
 				);
 		algoSwitch.getItems().setAll(options);
 		algoSwitch.setValue("BFS");
+		multiButton.setDisable(true);
 	}
 
 	/**
@@ -329,8 +335,13 @@ public class Simulator {
 		if (activeAlgo.getState().equals(AlgoState.notStarted)) {
 			if (startNode != null) {
 				activeAlgo.graphRefresh();
+
 				startButton.setText("Reset");
+				multiButton.setText("Pause");
+
 				stepButton.setDisable(true);
+				multiButton.setDisable(false);
+
 				activeAlgo.start(myCanvas, startNode);
 				myTime = new Timeline();
 				myTime.setCycleCount(activeAlgo.getCycle());
@@ -339,10 +350,20 @@ public class Simulator {
 			}
 		} else {
 			stepButton.setDisable(false);
+			multiButton.setDisable(false);
+
 			activeAlgo.reset();
-			if (myTime != null)
+			if (myTime != null) {
 				myTime.stop();
+				myTime = null;
+			}
+
 			startButton.setText("Start");
+			multiButton.setText("Back/Pause");
+
+			multiButton.setDisable(true);
+
+			pause = false;
 		}
 	}
 
@@ -352,20 +373,45 @@ public class Simulator {
 	@FXML
 	public void simulateStep() {
 		if (activeAlgo.getState().equals(AlgoState.done)) {
-			if (myTime != null)
+
+			multiButton.setText("Ended");
+			multiButton.setDisable(true);
+
+			if (myTime != null) {
 				myTime.stop();
-			if (myTime == null) {
+				myTime = null;
+			} else {
 				activeAlgo.reset();
+
 				startButton.setText("Start");
+				multiButton.setText("Back/Pause");
+
 				stepButton.setDisable(false);
+				multiButton.setDisable(true);
 			}
-		} else if (activeAlgo.getState().equals(AlgoState.onProgress) || activeAlgo.getState().equals(AlgoState.waitForReset))
+		} else if (activeAlgo.getState().equals(AlgoState.onProgress) || activeAlgo.getState().equals(AlgoState.waitForReset)) {
 			activeAlgo.step();
-		else if (activeAlgo.getState().equals(AlgoState.notStarted))
+		} else if (activeAlgo.getState().equals(AlgoState.notStarted))
 			if (startNode != null) {
 				activeAlgo.graphRefresh();
 				activeAlgo.start(myCanvas, startNode);
+
 				startButton.setText("Reset");
+				multiButton.setText("Back");
+
+				multiButton.setDisable(false);
 			}
+	}
+
+	public void simulatePauseBack(ActionEvent actionEvent) {
+		if (myTime != null && !pause) {
+			myTime.pause();
+			pause = true;
+			multiButton.setText("Continue");
+		} else if (myTime != null) {
+			myTime.play();
+			pause = false;
+			multiButton.setText("Pause");
+		}
 	}
 }

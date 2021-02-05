@@ -54,7 +54,8 @@ public abstract class Algorithm {
 	public void reset() {
 		state = AlgoState.notStarted;
 		visualGraph = new Graph(graph);
-		graph.refresh(canvas);
+		if (canvas != null)
+			graph.refresh(canvas);
 	}
 
 	public AlgoState getState() {
