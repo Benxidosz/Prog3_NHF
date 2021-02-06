@@ -1,9 +1,13 @@
 package ges.simulator.algorithms;
 
 import ges.graph.Graph;
-import ges.graph.edges.DoneEdge;
 import ges.graph.edges.Edge;
+import ges.graph.edges.skins.DoneEdgeSkin;
 import ges.graph.nodes.*;
+import ges.graph.nodes.skins.DFS.DFSDoneNodeSkin;
+import ges.graph.nodes.skins.DFS.DFSFocusedNodeSkin;
+import ges.graph.nodes.skins.DFS.DFSOnProgressNodeSkin;
+import ges.graph.nodes.skins.DFS.DFSReachableNodeSkin;
 import javafx.scene.canvas.Canvas;
 
 import java.util.HashMap;
@@ -53,6 +57,15 @@ public class DFS extends Algorithm {
 	 */
 	@Override
 	public void step() {
+		if (previous != null) {
+			visualGraph.getNode(previous.getId()).reset();
+			visualGraph.getNode(previous.getId()).getNeighbours().forEach(Node::reset);
+		}
+
+		visualGraph.getNode(next.getId()).getNeighbours().forEach(node -> {
+			DFSStep tmp = table.get(node.getId());
+			node.switchSkin(new DFSReachableNodeSkin(node, tmp.d, tmp.m, tmp.f));
+		});
 		if (state == AlgoState.waitForReset) {
 			visualGraph.getNode(next.getId()).reset();
 			state = AlgoState.done;
@@ -61,17 +74,13 @@ public class DFS extends Algorithm {
 			Node switchNode = visualGraph.getNode(next.getId());
 
 			DFSStep progress = table.get(switchNode.getId());
-			Node newNode = new DFSOnProgressNode(switchNode, progress.d, progress.m);
-			visualGraph.switchNode(switchNode, newNode);
+			switchNode.setMySkin(new DFSOnProgressNodeSkin(switchNode, progress.d, progress.m, progress.f));
 
 			if (previous != null) {
-				Edge switchEdge = visualGraph.getEdge(newNode, visualGraph.getNode(previous.getId()));
+				Edge switchEdge = visualGraph.getEdge(switchNode, visualGraph.getNode(previous.getId()));
 				if (switchEdge != null)
-					visualGraph.switchEdge(switchEdge, new DoneEdge(newNode, visualGraph.getNode(previous.getId())));
+					switchEdge.setMySkin(new DoneEdgeSkin(switchEdge));
 			}
-
-			if (previous != null)
-				visualGraph.getNode(previous.getId()).reset();
 			for (Node nei : next.getNeighbours()) {
 				DFSStep tmpStep = table.get(nei.getId());
 				if (tmpStep.d == -1) {
@@ -79,7 +88,7 @@ public class DFS extends Algorithm {
 					tmpStep.m = next.getId();
 					previous = next;
 					switchNode = visualGraph.getNode(next.getId());
-					visualGraph.switchNode(switchNode, new FocusedNode(switchNode));
+					switchNode.switchSkin(new DFSFocusedNodeSkin(switchNode, tmpStep.d, tmpStep.m, tmpStep.f));
 					next = nei;
 					hasNext = true;
 					break;
@@ -90,10 +99,10 @@ public class DFS extends Algorithm {
 
 				table.get(next.getId()).f = F++;
 				switchNode = visualGraph.getNode(next.getId());
-				visualGraph.switchNode(switchNode, new DFSDoneNode(switchNode, tmpStep.d, tmpStep.m, tmpStep.f));
+				switchNode.setMySkin(new DFSDoneNodeSkin(switchNode, tmpStep.d, tmpStep.m, tmpStep.f));
 
 				switchNode = visualGraph.getNode(next.getId());
-				visualGraph.switchNode(switchNode, new FocusedNode(switchNode));
+				switchNode.switchSkin(new DFSFocusedNodeSkin(switchNode, tmpStep.d, tmpStep.m, tmpStep.f));
 
 				if (!"".equals(tmpStep.m) && tmpStep.m != null) {
 					previous = next;

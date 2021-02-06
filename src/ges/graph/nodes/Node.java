@@ -3,6 +3,8 @@ package ges.graph.nodes;
 import ges.graph.Graph;
 import ges.graph.Position;
 import ges.graph.Scheme;
+import ges.graph.Skin;
+import ges.graph.nodes.skins.BaseNodeSkin;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -13,6 +15,8 @@ import java.util.LinkedHashSet;
  * A subclass of the Scheme. It is represent an Node.
  */
 public class Node extends Scheme {
+
+	protected Skin prevSkin;
 
 	/**
 	 * A list of the neighbour Nodes.
@@ -49,6 +53,8 @@ public class Node extends Scheme {
 	 */
 	public Node(Graph graph, String id, Position pos, String chooser) {
 		super(pos);
+		mySkin = new BaseNodeSkin(this);
+		prevSkin = null;
 
 		this.pos = pos;
 		this.id = id;
@@ -154,33 +160,6 @@ public class Node extends Scheme {
 	}
 
 	/**
-	 * Draw the, whole Node.
-	 *
-	 * @param canvas The canvas, where the Scheme will be drawn.
-	 */
-	@Override
-	public void draw(Canvas canvas) {
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-		double x;
-		double y;
-		if (tmpPos != null) {
-			x = tmpPos.x;
-			y = tmpPos.y;
-		} else {
-			x = pos.x;
-			y = pos.y;
-		}
-
-		setColor(gc);
-
-		gc.fillOval(x - myGraph.nodeRadius, y - myGraph.nodeRadius, myGraph.nodeRadius * 2, myGraph.nodeRadius * 2);
-
-		drawStroke(x, y, gc);
-
-		drawText(gc, x, y);
-	}
-
-	/**
 	 * The hoover animation.
 	 *
 	 * @param canvas The canvas, where the Scheme will be drawn.
@@ -236,6 +215,30 @@ public class Node extends Scheme {
 	}
 
 	public void reset() {
+		if (prevSkin != null) {
+			mySkin = prevSkin;
+			prevSkin = null;
+		}
+	}
 
+	public String getChooser() {
+		return chooser;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	@Override
+	public void setMySkin(Skin mySkin) {
+		this.mySkin = mySkin;
+		prevSkin = null;
+	}
+
+	public void switchSkin(Skin skin) {
+		if (mySkin.isSwitchable() || skin.isGod()) {
+			prevSkin = mySkin;
+			mySkin = skin;
+		}
 	}
 }

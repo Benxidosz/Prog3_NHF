@@ -1,5 +1,6 @@
 package ges.graph;
 
+import ges.graph.nodes.skins.BaseNodeSkin;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -10,6 +11,8 @@ import java.io.Serializable;
  * A super call of the Schemes, which can be drown and serialized.
  */
 public abstract class Scheme implements Serializable {
+
+	protected Skin mySkin;
 
 	/**
 	 * The position of the Scheme.
@@ -74,7 +77,9 @@ public abstract class Scheme implements Serializable {
 	 *
 	 * @param canvas The canvas, where the Scheme will be drawn.
 	 */
-	public abstract void draw(Canvas canvas);
+	public void draw(Canvas canvas) {
+		mySkin.draw(canvas);
+	}
 
 	/**
 	 * The hoover method.
@@ -97,4 +102,12 @@ public abstract class Scheme implements Serializable {
 	 * @return The svg code of the Scheme.
 	 */
 	public abstract String export(double w, double h);
+
+	public void setMySkin(Skin mySkin) {
+		this.mySkin = mySkin;
+	}
+
+	public Skin getMySkin() {
+		return mySkin;
+	}
 }

@@ -2,9 +2,8 @@ package ges.graph.edges;
 
 import ges.graph.Position;
 import ges.graph.Scheme;
+import ges.graph.edges.skins.BaseEdgeSkin;
 import ges.graph.nodes.Node;
-import ges.graph.nodes.OnProgressNode;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -30,6 +29,8 @@ public class Edge extends Scheme {
 		nodes = new Node[2];
 		nodes[0] = n1;
 		nodes[1] = n2;
+
+		mySkin = new BaseEdgeSkin(this);
 	}
 
 	/**
@@ -43,48 +44,13 @@ public class Edge extends Scheme {
 		nodes = new Node[2];
 		nodes[0] = n1;
 		nodes[1] = new Node(null, "", pos, null);
+
+		mySkin = new BaseEdgeSkin(this);
 	}
 
 	@Override
 	protected void setColor(GraphicsContext gc) {
 		gc.setStroke(Color.BLACK);
-	}
-
-	/**
-	 * Draw a line between the two nodes center (position).
-	 *
-	 * @param canvas The canvas, where the Scheme will be drawn.
-	 */
-	@Override
-	public void draw(Canvas canvas) {
-		double x1;
-		double y1;
-		double x2;
-		double y2;
-		if (nodes[0].getTmpPos() != null) {
-			x1 = nodes[0].getTmpPos().x;
-			y1 = nodes[0].getTmpPos().y;
-		} else {
-			x1 = nodes[0].getPosition().x;
-			y1 = nodes[0].getPosition().y;
-		}
-		if (nodes[1].getTmpPos() != null) {
-			x2 = nodes[1].getTmpPos().x;
-			y2 = nodes[1].getTmpPos().y;
-		} else {
-			x2 = nodes[1].getPosition().x;
-			y2 = nodes[1].getPosition().y;
-		}
-
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-		double originalWidth = gc.getLineWidth();
-
-		setColor(gc);
-
-		gc.strokeLine(x1, y1, x2, y2);
-
-		gc.setStroke(Color.BLACK);
-		gc.setLineWidth(originalWidth);
 	}
 
 	/**
