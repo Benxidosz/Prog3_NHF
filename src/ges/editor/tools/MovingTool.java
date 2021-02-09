@@ -1,10 +1,10 @@
 package ges.editor.tools;
 
-import ges.editor.diary.Diary;
+import ges.editor.diary.EditorDiary;
 import ges.editor.diary.logs.AllMoveLog;
 import ges.editor.diary.logs.MoveLog;
 import ges.graph.Graph;
-import ges.graph.nodes.Node;
+import ges.graph.node.Node;
 import ges.graph.Position;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseEvent;
@@ -50,7 +50,7 @@ public class MovingTool extends Tool {
 	 * @param g       The value of the graph field.
 	 * @param tracker The value of the tracker field.
 	 */
-	public MovingTool(Graph g, Diary tracker) {
+	public MovingTool(Graph g, EditorDiary tracker) {
 		super(g, tracker);
 		selected = null;
 	}

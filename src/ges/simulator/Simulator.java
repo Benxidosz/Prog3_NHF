@@ -2,7 +2,7 @@ package ges.simulator;
 
 import ges.editor.Editor;
 import ges.graph.Graph;
-import ges.graph.nodes.Node;
+import ges.graph.node.Node;
 import ges.graph.Position;
 import ges.menu.MainMenu;
 import ges.menu.OpenGraphTable;
@@ -10,6 +10,7 @@ import ges.simulator.algorithms.AlgoState;
 import ges.simulator.algorithms.Algorithm;
 import ges.simulator.algorithms.BFS;
 import ges.simulator.algorithms.DFS;
+import ges.simulator.diary.SimulatorDiary;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
@@ -93,6 +94,8 @@ public class Simulator {
 	Algorithm activeAlgo;
 	Timeline myTime;
 
+	SimulatorDiary diary;
+
 	/**
 	 * mouse pos
 	 */
@@ -108,13 +111,14 @@ public class Simulator {
 	/**
 	 * Constructor, it load the fxml, and set the stage up.
 	 *
-	 * @param load
+	 * @param load The graph what is need to be loaded.
 	 * @throws IOException
 	 */
 	public Simulator(Graph load) throws IOException {
 		graph = load;
 		startNode = null;
 		activeAlgo = new BFS(graph);
+		diary = new SimulatorDiary();
 
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("simulator.fxml"));
 		loader.setControllerFactory(c -> this);
@@ -320,11 +324,14 @@ public class Simulator {
 	 */
 	@FXML
 	public void algoSwitch() {
+		if (!activeAlgo.getState().equals(AlgoState.notStarted))
+			simulateStart();
 		if ("BFS".equals(algoSwitch.getValue())) {
 			activeAlgo = new BFS(graph);
 		} else if ("DFS".equals(algoSwitch.getValue())) {
 			activeAlgo = new DFS(graph);
 		}
+		diary = new SimulatorDiary();
 	}
 
 	/**
@@ -335,6 +342,7 @@ public class Simulator {
 		if (activeAlgo.getState().equals(AlgoState.notStarted)) {
 			if (startNode != null) {
 				activeAlgo.graphRefresh();
+				diary = new SimulatorDiary();
 
 				startButton.setText("Reset");
 				multiButton.setText("Pause");
@@ -353,6 +361,7 @@ public class Simulator {
 			multiButton.setDisable(false);
 
 			activeAlgo.reset();
+			diary = new SimulatorDiary();
 			if (myTime != null) {
 				myTime.stop();
 				myTime = null;
@@ -390,11 +399,12 @@ public class Simulator {
 				multiButton.setDisable(true);
 			}
 		} else if (activeAlgo.getState().equals(AlgoState.onProgress) || activeAlgo.getState().equals(AlgoState.waitForReset)) {
-			activeAlgo.step();
+			diary.addStep(activeAlgo.step());
 		} else if (activeAlgo.getState().equals(AlgoState.notStarted))
 			if (startNode != null) {
 				activeAlgo.graphRefresh();
 				activeAlgo.start(myCanvas, startNode);
+				diary = new SimulatorDiary();
 
 				startButton.setText("Reset");
 				multiButton.setText("Back");
@@ -412,6 +422,9 @@ public class Simulator {
 			myTime.play();
 			pause = false;
 			multiButton.setText("Pause");
+		} else if (!diary.isEmpty()) {
+			diary.back();
+			activeAlgo.visualRefresh(myCanvas);
 		}
 	}
 }

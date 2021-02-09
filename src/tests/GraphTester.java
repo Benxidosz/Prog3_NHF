@@ -2,7 +2,7 @@ import ges.graph.Graph;
 import ges.graph.Position;
 import org.junit.Assert;
 import org.junit.Before;
-import ges.graph.nodes.Node;
+import ges.graph.node.Node;
 import org.junit.Test;
 
 import java.util.HashMap;

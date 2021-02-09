@@ -9,7 +9,7 @@ import javafx.scene.input.ScrollEvent;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
-public class Diary {
+public class EditorDiary {
 
 	//TODO update docs
 	/**
@@ -37,7 +37,7 @@ public class Diary {
 	/**
 	 * The Constructor of the stepTracker.
 	 */
-	public Diary() {
+	public EditorDiary() {
 		logs = new LinkedList<Log>();
 		tmpLog = null;
 	}

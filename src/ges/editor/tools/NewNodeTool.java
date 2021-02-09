@@ -1,9 +1,9 @@
 package ges.editor.tools;
 
-import ges.editor.diary.Diary;
+import ges.editor.diary.EditorDiary;
 import ges.editor.diary.logs.NewNodeLog;
 import ges.graph.Graph;
-import ges.graph.nodes.Node;
+import ges.graph.node.Node;
 import ges.graph.Position;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ComboBox;
@@ -29,7 +29,7 @@ public class NewNodeTool extends Tool {
 	 * @param chooser The value of the chooser field.
 	 * @param diary   The value of the stepTracker field.
 	 */
-	public NewNodeTool(Graph g, ComboBox chooser, Diary diary) {
+	public NewNodeTool(Graph g, ComboBox chooser, EditorDiary diary) {
 		super(g, diary);
 		this.chooser = chooser;
 	}

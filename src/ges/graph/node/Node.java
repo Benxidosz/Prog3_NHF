@@ -1,10 +1,10 @@
-package ges.graph.nodes;
+package ges.graph.node;
 
 import ges.graph.Graph;
 import ges.graph.Position;
 import ges.graph.Scheme;
 import ges.graph.Skin;
-import ges.graph.nodes.skins.BaseNodeSkin;
+import ges.graph.node.skins.BaseNodeSkin;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -240,5 +240,13 @@ public class Node extends Scheme {
 			prevSkin = mySkin;
 			mySkin = skin;
 		}
+	}
+
+	public Skin getPrevSkin() {
+		return prevSkin;
+	}
+
+	public void setPrevSkin(Skin prevSkin) {
+		this.prevSkin = prevSkin;
 	}
 }

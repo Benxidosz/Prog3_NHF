@@ -1,9 +1,9 @@
 package ges.editor;
 
-import ges.editor.diary.Diary;
+import ges.editor.diary.EditorDiary;
 import ges.editor.diary.logs.AllMoveLog;
 import ges.graph.Graph;
-import ges.graph.nodes.Node;
+import ges.graph.node.Node;
 import ges.graph.Position;
 import ges.menu.OpenGraphTable;
 import ges.menu.RenameGraph;
@@ -99,7 +99,7 @@ public class Editor {
 	/**
 	 * The stepTracker, which track the changes.
 	 */
-	final Diary diary;
+	final EditorDiary diary;
 
 	/**
 	 * Reference to the last clicked toolButton (move, newNode, rmNode, newEdge, rmEdge)
@@ -126,7 +126,7 @@ public class Editor {
 	public Editor(Graph g) throws IOException {
 		//initialize the graph and stepTracker.
 		graph = g;
-		diary = new Diary();
+		diary = new EditorDiary();
 
 		//Load the fxml.
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("editor.fxml"));
@@ -446,7 +446,7 @@ public class Editor {
 	public void editorUndo() {
 		try {
 			diary.undoStep();
-		} catch (Diary.NoStepException noStepException) {
+		} catch (EditorDiary.NoStepException noStepException) {
 			System.err.println(noStepException.getMessage());
 		}
 		graph.refresh(myCanvas);
@@ -462,7 +462,7 @@ public class Editor {
 	public void editorRedo() {
 		try {
 			diary.redoStep();
-		} catch (Diary.NoStepException noStepException) {
+		} catch (EditorDiary.NoStepException noStepException) {
 			System.err.println(noStepException.getMessage());
 		}
 		graph.refresh(myCanvas);

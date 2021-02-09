@@ -1,10 +1,10 @@
 package ges.editor.tools;
 
-import ges.editor.diary.Diary;
+import ges.editor.diary.EditorDiary;
 import ges.editor.diary.logs.RmEdgeLog;
 import ges.graph.edges.Edge;
 import ges.graph.Graph;
-import ges.graph.nodes.Node;
+import ges.graph.node.Node;
 import ges.graph.Position;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseEvent;
@@ -26,7 +26,7 @@ public class RmEdgeTool extends Tool {
 	 * @param g     The value of the graph field.
 	 * @param diary The value of the tracker field.
 	 */
-	public RmEdgeTool(Graph g, Diary diary) {
+	public RmEdgeTool(Graph g, EditorDiary diary) {
 		super(g, diary);
 	}
 

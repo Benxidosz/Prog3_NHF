@@ -1,7 +1,7 @@
 package ges.graph;
 
 import ges.graph.edges.Edge;
-import ges.graph.nodes.Node;
+import ges.graph.node.Node;
 import javafx.scene.canvas.Canvas;
 
 import java.io.*;

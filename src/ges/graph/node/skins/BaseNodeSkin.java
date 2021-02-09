@@ -1,8 +1,8 @@
-package ges.graph.nodes.skins;
+package ges.graph.node.skins;
 
 import ges.graph.Graph;
 import ges.graph.Skin;
-import ges.graph.nodes.Node;
+import ges.graph.node.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;

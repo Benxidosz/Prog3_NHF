@@ -3,9 +3,11 @@ package ges.simulator.algorithms;
 import ges.graph.Graph;
 import ges.graph.edges.Edge;
 import ges.graph.edges.skins.DoneEdgeSkin;
-import ges.graph.nodes.Node;
-import ges.graph.nodes.skins.BFS.BFSDoneNodeSkin;
-import ges.graph.nodes.skins.BFS.BFSOnProgressNodeSkin;
+import ges.graph.node.Node;
+import ges.graph.node.skins.BFS.BFSDoneNodeSkin;
+import ges.graph.node.skins.BFS.BFSOnProgressNodeSkin;
+import ges.simulator.diary.Step;
+import ges.simulator.diary.actions.*;
 import javafx.scene.canvas.Canvas;
 
 import java.util.HashMap;
@@ -48,10 +50,14 @@ public class BFS extends Algorithm {
 	 * Do a step of BFS.
 	 */
 	@Override
-	public void step() {
+	public Step step() {
+		Step step = new Step();
+
 		if (processQueue.isEmpty()) {
+			step.addAction(new StateChangeAction(this));
 			state = AlgoState.done;
 		} else {
+			step.addAction(new QueuePollAction<Node>(processQueue));
 			Node underProcess = processQueue.poll();
 			Node underInVisual = visualGraph.getNode(underProcess.getId());
 
@@ -59,35 +65,48 @@ public class BFS extends Algorithm {
 				if (!(processed.contains(nei) || processQueue.contains(nei))) {
 					try {
 						processQueue.put(nei);
+						step.addAction(new QueuePutAction<Node>(processQueue, nei));
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 
 					BFSStep tmpNei = new BFSStep(distances.get(underProcess.getId()).distance + 1, index, underProcess.getId());
+
 					distances.put(nei.getId(), tmpNei);
+					step.addAction(new HashMapPutAction<String, BFSStep>(distances, nei.getId(), tmpNei));
+
 					index++;
 
 					Node switchNode = visualGraph.getNode(nei.getId());
+
+					step.addAction(new SkinSetAction(switchNode));
 					switchNode.setMySkin(new BFSOnProgressNodeSkin(switchNode, tmpNei.distance, tmpNei.index, tmpNei.prev));
 
 					Edge switchEdge = visualGraph.getEdge(switchNode, underInVisual);
-					if (switchEdge != null)
+					if (switchEdge != null) {
+						step.addAction(new SkinSetAction(switchEdge));
 						switchEdge.setMySkin(new DoneEdgeSkin(switchEdge));
+					}
 				}
 			}
 
 			try {
 				processed.put(underProcess);
+				step.addAction(new QueuePutAction<Node>(processed, underProcess));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 
 			Node switchNode = visualGraph.getNode(underProcess.getId());
 			BFSStep underProcessBFS = distances.get(underProcess.getId());
+
+			step.addAction(new SkinSetAction(switchNode));
 			switchNode.setMySkin(new BFSDoneNodeSkin(switchNode, underProcessBFS.distance, underProcessBFS.index, underProcessBFS.prev));
 
 			visualGraph.refresh(canvas);
 		}
+
+		return step;
 	}
 
 	/**

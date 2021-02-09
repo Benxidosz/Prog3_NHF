@@ -1,8 +1,8 @@
-package ges.graph.nodes.skins.DFS;
+package ges.graph.node.skins.DFS;
 
 import ges.graph.Graph;
-import ges.graph.nodes.Node;
-import ges.graph.nodes.skins.BaseNodeSkin;
+import ges.graph.node.Node;
+import ges.graph.node.skins.BaseNodeSkin;
 import javafx.scene.canvas.GraphicsContext;
 
 public class DFSBaseNodeSkin extends BaseNodeSkin {

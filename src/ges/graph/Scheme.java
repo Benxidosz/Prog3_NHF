@@ -1,9 +1,7 @@
 package ges.graph;
 
-import ges.graph.nodes.skins.BaseNodeSkin;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 import java.io.Serializable;
 

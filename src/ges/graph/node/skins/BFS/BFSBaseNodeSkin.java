@@ -1,7 +1,7 @@
-package ges.graph.nodes.skins.BFS;
+package ges.graph.node.skins.BFS;
 
-import ges.graph.nodes.Node;
-import ges.graph.nodes.skins.BaseNodeSkin;
+import ges.graph.node.Node;
+import ges.graph.node.skins.BaseNodeSkin;
 import javafx.scene.canvas.GraphicsContext;
 
 public class BFSBaseNodeSkin extends BaseNodeSkin {

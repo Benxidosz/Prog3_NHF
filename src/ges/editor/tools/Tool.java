@@ -1,6 +1,6 @@
 package ges.editor.tools;
 
-import ges.editor.diary.Diary;
+import ges.editor.diary.EditorDiary;
 import ges.graph.Graph;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseEvent;
@@ -19,7 +19,7 @@ public abstract class Tool {
 	 * The StepTracker that is controlling the step history.
 	 * It is need because the tool will add step to StepTracker.
 	 */
-	protected final Diary diary;
+	protected final EditorDiary diary;
 
 	/**
 	 * Constructor of the Tool.
@@ -27,7 +27,7 @@ public abstract class Tool {
 	 * @param g     The value of the graph field.
 	 * @param diary The value of the tracker field.
 	 */
-	public Tool(Graph g, Diary diary) {
+	public Tool(Graph g, EditorDiary diary) {
 		graph = g;
 		this.diary = diary;
 	}

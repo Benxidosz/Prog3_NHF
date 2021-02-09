@@ -1,7 +1,7 @@
 package ges.editor.diary.logs;
 
 import ges.graph.Graph;
-import ges.graph.nodes.Node;
+import ges.graph.node.Node;
 import ges.graph.Position;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.ScrollEvent;

@@ -1,7 +1,8 @@
 package ges.simulator.algorithms;
 
 import ges.graph.Graph;
-import ges.graph.nodes.Node;
+import ges.graph.node.Node;
+import ges.simulator.diary.Step;
 import javafx.scene.canvas.Canvas;
 
 /**
@@ -33,7 +34,7 @@ public abstract class Algorithm {
 	/**
 	 * A step.
 	 */
-	public abstract void step();
+	public abstract Step step();
 
 	/**
 	 * First step.
@@ -64,5 +65,13 @@ public abstract class Algorithm {
 
 	public void graphRefresh() {
 		visualGraph = new Graph(graph);
+	}
+
+	public void visualRefresh(Canvas canvas) {
+		visualGraph.refresh(canvas);
+	}
+
+	public void setState(AlgoState state) {
+		this.state = state;
 	}
 }

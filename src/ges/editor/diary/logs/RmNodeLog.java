@@ -1,7 +1,7 @@
 package ges.editor.diary.logs;
 
 import ges.graph.Graph;
-import ges.graph.nodes.Node;
+import ges.graph.node.Node;
 
 public class RmNodeLog extends Log {
 	private final Node removedNode;
