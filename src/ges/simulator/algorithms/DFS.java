@@ -113,7 +113,7 @@ public class DFS extends Algorithm {
 			step.addAction(new SkinSetAction(switchNode));
 			switchNode.setMySkin(new DFSOnProgressNodeSkin(switchNode, progress.d, progress.m, progress.f));
 
-			if (previous != null) {
+			if (previous != null && progress.m.equals(previous.getId())) {
 				Edge switchEdge = visualGraph.getEdge(switchNode, visualGraph.getNode(previous.getId()));
 				if (switchEdge != null) {
 					step.addAction(new SkinMakeDoneAction(switchEdge.getMySkin()));
