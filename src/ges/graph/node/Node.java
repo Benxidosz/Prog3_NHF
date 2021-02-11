@@ -16,23 +16,19 @@ import java.util.LinkedHashSet;
  */
 public class Node extends Scheme {
 
-	protected Skin prevSkin;
-
 	/**
 	 * A list of the neighbour Nodes.
 	 */
 	protected final LinkedHashSet<Node> neighbours;
-
-	/**
-	 * The id of the Node.
-	 */
-	private final String id;
-
 	/**
 	 * The node's graph.
 	 */
 	protected final Graph myGraph;
-
+	/**
+	 * The id of the Node.
+	 */
+	private final String id;
+	protected Skin prevSkin;
 	/**
 	 * A state, it show it is selected by an algorithm/tool.
 	 */
@@ -116,15 +112,6 @@ public class Node extends Scheme {
 	}
 
 	/**
-	 * Set the chooser.
-	 *
-	 * @param choose The new value.
-	 */
-	public void setChooser(String choose) {
-		chooser = choose;
-	}
-
-	/**
 	 * Get the value of the dim.
 	 *
 	 * @return The value of the dim.
@@ -150,13 +137,6 @@ public class Node extends Scheme {
 			gc.setFill(Color.RED);
 		else
 			gc.setFill(Color.WHITE);
-	}
-
-	protected void drawText(GraphicsContext gc, double x, double y) {
-		if (chooser.equals("Id"))
-			gc.strokeText(id, x, y, myGraph.nodeRadius * 2);
-		else
-			gc.strokeText(String.valueOf(getDim()), x, y, myGraph.nodeRadius * 2);
 	}
 
 	/**
@@ -223,6 +203,15 @@ public class Node extends Scheme {
 
 	public String getChooser() {
 		return chooser;
+	}
+
+	/**
+	 * Set the chooser.
+	 *
+	 * @param choose The new value.
+	 */
+	public void setChooser(String choose) {
+		chooser = choose;
 	}
 
 	public boolean isSelected() {

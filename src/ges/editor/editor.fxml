@@ -33,6 +33,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
@@ -48,15 +49,18 @@
             <Button fx:id="editorNewEdge" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                     mnemonicParsing="false" onAction="#toolSelect" styleClass="Button" text="New Edge"
                     GridPane.rowIndex="3"/>
+            <Button fx:id="editorNewDirectedEdge" layoutX="15.0" layoutY="245.0" maxHeight="1.7976931348623157E308"
+                    maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#toolSelect" styleClass="Button"
+                    text="New Directed Edge" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="4"/>
             <Button fx:id="editorRmEdge" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                     mnemonicParsing="false" onAction="#toolSelect" styleClass="Button" text="Remove Edge"
-                    textAlignment="CENTER" wrapText="true" GridPane.rowIndex="4"/>
+                    textAlignment="CENTER" wrapText="true" GridPane.rowIndex="5"/>
             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                    onAction="#sort" styleClass="Button" text="Sort" GridPane.rowIndex="6"/>
+                    onAction="#sort" styleClass="Button" text="Sort" GridPane.rowIndex="7"/>
             <Button alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                     mnemonicParsing="false" onAction="#goSimulator" styleClass="Button" text="Go to Simulator"
-                    textAlignment="CENTER" wrapText="true" GridPane.rowIndex="7"/>
-            <ComboBox fx:id="editorNameSwitcher" onAction="#nameSwitched" prefWidth="100.0" GridPane.rowIndex="5"/>
+                    textAlignment="CENTER" wrapText="true" GridPane.rowIndex="8"/>
+            <ComboBox fx:id="editorNameSwitcher" onAction="#nameSwitched" prefWidth="100.0" GridPane.rowIndex="6"/>
         </GridPane>
     </left>
     <center>

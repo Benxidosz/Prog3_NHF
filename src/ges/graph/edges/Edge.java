@@ -2,6 +2,7 @@ package ges.graph.edges;
 
 import ges.graph.Position;
 import ges.graph.Scheme;
+import ges.graph.Skin;
 import ges.graph.edges.skins.BaseEdgeSkin;
 import ges.graph.node.Node;
 import javafx.scene.canvas.GraphicsContext;
@@ -87,5 +88,9 @@ public class Edge extends Scheme {
 
 	public Node[] getNodes() {
 		return nodes;
+	}
+
+	public boolean exactCompare(Node n1, Node n2) {
+		return this.nodes[0] == n1 && this.nodes[1] == n2;
 	}
 }

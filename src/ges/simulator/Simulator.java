@@ -112,7 +112,7 @@ public class Simulator {
 	 * Constructor, it load the fxml, and set the stage up.
 	 *
 	 * @param load The graph what is need to be loaded.
-	 * @throws IOException
+	 * @throws IOException It must.
 	 */
 	public Simulator(Graph load) throws IOException {
 		graph = load;

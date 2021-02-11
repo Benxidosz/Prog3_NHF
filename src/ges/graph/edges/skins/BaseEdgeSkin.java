@@ -11,8 +11,11 @@ import java.io.Serializable;
 public class BaseEdgeSkin extends Skin {
 	protected final Edge myEdge;
 
+	private Skin sideSkin;
+
 	public BaseEdgeSkin(Edge myEdge) {
 		this.myEdge = myEdge;
+		sideSkin = null;
 	}
 
 	@Override
@@ -51,13 +54,25 @@ public class BaseEdgeSkin extends Skin {
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		double originalWidth = gc.getLineWidth();
 
-		setColor(gc);
+		if (sideSkin == null)
+			setColor(gc);
+		else
+			sideSkin.setColor(gc);
 
 		gc.strokeLine(x1, y1, x2, y2);
 
 		gc.setStroke(Color.BLACK);
 		gc.setLineWidth(originalWidth);
+		gc.setFill(Color.BLACK);
 	}
 
+	@Override
+	public void makeDone() {
+		sideSkin = new DoneEdgeSkin(myEdge);
+	}
 
+	@Override
+	public void unDone() {
+		sideSkin = null;
+	}
 }

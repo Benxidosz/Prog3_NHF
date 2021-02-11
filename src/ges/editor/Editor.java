@@ -86,6 +86,9 @@ public class Editor {
 	@FXML
 	public Button editorNewEdge;
 
+	@FXML
+	public Button editorNewDirectedEdge;
+
 	/**
 	 * The stage, where the things appear.
 	 */
@@ -192,6 +195,8 @@ public class Editor {
 			activeTool = new MovingTool(graph, diary);
 		} else if (selectedButton == editorNewEdge) {
 			activeTool = new NewSimpleEdgeTool(graph, diary);
+		} else if (selectedButton == editorNewDirectedEdge) {
+			activeTool = new NewDirectedEdgeTool(graph, diary);
 		} else if (selectedButton == editorRmEdge) {
 			activeTool = new RmEdgeTool(graph, diary);
 		} else {

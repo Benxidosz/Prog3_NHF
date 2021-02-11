@@ -18,24 +18,21 @@ import java.util.HashMap;
  * The Depth First Algorithm
  */
 public class DFS extends Algorithm {
-	public DFS(Graph g) {
-		super(g);
-	}
-
+	HashMap<String, DFSStep> table;
+	int D;
+	int F;
 	/**
 	 * The next node, which should be process,
 	 */
 	private Node next;
-
 	/**
 	 * the previous what was processed.
 	 */
 	private Node previous;
 
-	/**
-	 * The previous Node's state.
-	 */
-	AlgoState prevState;
+	public DFS(Graph g) {
+		super(g);
+	}
 
 	public Node getNext() {
 		return next;
@@ -57,40 +54,17 @@ public class DFS extends Algorithm {
 		return D;
 	}
 
-	public int getF() {
-		return F;
-	}
-
 	public void setD(int d) {
 		D = d;
+	}
+
+	public int getF() {
+		return F;
 	}
 
 	public void setF(int f) {
 		F = f;
 	}
-
-	class DFSStep {
-		int d;
-		int f;
-		String m;
-
-		DFSStep() {
-			d = -1;
-			f = -1;
-			m = "";
-		}
-
-		DFSStep(DFSStep other) {
-			d = other.d;
-			f = other.f;
-			m = other.m;
-		}
-	}
-
-	HashMap<String, DFSStep> table;
-
-	int D;
-	int F;
 
 	/**
 	 * A dfs step.
@@ -107,15 +81,20 @@ public class DFS extends Algorithm {
 			step.addAction(new SkinResetAction(visualPrev));
 			visualPrev.reset();
 
-			visualPrev.getNeighbours().forEach(node -> step.addAction(new SkinResetAction(node)));
-			visualPrev.getNeighbours().forEach(Node::reset);
+			previous.getNeighbours().forEach(node -> {
+				Node visualNode = visualGraph.getNode(node.getId());
+
+				step.addAction(new SkinResetAction(visualNode));
+				visualNode.reset();
+			});
 		}
 
-		visualGraph.getNode(next.getId()).getNeighbours().forEach(node -> {
+		next.getNeighbours().forEach(node -> {
 			DFSStep tmp = table.get(node.getId());
+			Node visualNode = visualGraph.getNode(node.getId());
 
-			step.addAction(new SkinSwitchAction(node));
-			node.switchSkin(new DFSReachableNodeSkin(node, tmp.d, tmp.m, tmp.f));
+			step.addAction(new SkinSwitchAction(visualNode));
+			visualNode.switchSkin(new DFSReachableNodeSkin(visualNode, tmp.d, tmp.m, tmp.f));
 		});
 		if (state == AlgoState.waitForReset) {
 			Node visualNext = visualGraph.getNode(next.getId());
@@ -137,14 +116,14 @@ public class DFS extends Algorithm {
 			if (previous != null) {
 				Edge switchEdge = visualGraph.getEdge(switchNode, visualGraph.getNode(previous.getId()));
 				if (switchEdge != null) {
-					step.addAction(new SkinSetAction(switchEdge));
-					switchEdge.setMySkin(new DoneEdgeSkin(switchEdge));
+					step.addAction(new SkinMakeDoneAction(switchEdge.getMySkin()));
+					switchEdge.getMySkin().makeDone();
 				}
 			}
 			for (Node nei : next.getNeighbours()) {
 				DFSStep tmpStep = table.get(nei.getId());
 				if (tmpStep.d == -1) {
-					step.addAction(new HashMapValueChange<String, DFSStep>(table, nei.getId(), new DFSStep(tmpStep)));
+					step.addAction(new HashMapValueChange<>(table, nei.getId(), new DFSStep(tmpStep)));
 					DFSStep prevStep = new DFSStep(tmpStep);
 
 					tmpStep.d = D++;
@@ -164,7 +143,7 @@ public class DFS extends Algorithm {
 			}
 			if (!hasNext) {
 				DFSStep tmpStep = table.get(next.getId());
-				step.addAction(new HashMapValueChange<String, DFSStep>(table, next.getId(), new DFSStep(tmpStep)));
+				step.addAction(new HashMapValueChange<>(table, next.getId(), new DFSStep(tmpStep)));
 
 				tmpStep.f = F++;
 
@@ -188,7 +167,7 @@ public class DFS extends Algorithm {
 
 							DFSStep nextStep = table.get(node.getId());
 
-							step.addAction(new HashMapValueChange<String, DFSStep>(table, node.getId(), new DFSStep(nextStep)));
+							step.addAction(new HashMapValueChange<>(table, node.getId(), new DFSStep(nextStep)));
 							nextStep.d = D++;
 							noNext = false;
 							break;
@@ -225,5 +204,23 @@ public class DFS extends Algorithm {
 	@Override
 	public int getCycle() {
 		return (graph.getNodes().size() * 2) + 1;
+	}
+
+	private static class DFSStep {
+		int d;
+		int f;
+		String m;
+
+		DFSStep() {
+			d = -1;
+			f = -1;
+			m = "";
+		}
+
+		DFSStep(DFSStep other) {
+			d = other.d;
+			f = other.f;
+			m = other.m;
+		}
 	}
 }

@@ -45,10 +45,8 @@ public class NewNodeTool extends Tool {
 	@Override
 	public void click(MouseEvent mouseEvent, Canvas canvas) {
 		Position mousePos = new Position(mouseEvent);
-		if (graph.addNode(mousePos, (String) chooser.getValue())) {
-			graph.refresh(canvas);
-			Node added = graph.getNode(mousePos);
-			diary.addLog(new NewNodeLog(graph, added));
-		}
+		Node added = graph.addNode(mousePos, (String) chooser.getValue());
+		graph.refresh(canvas);
+		diary.addLog(new NewNodeLog(graph, added));
 	}
 }

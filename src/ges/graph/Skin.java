@@ -9,9 +9,9 @@ public abstract class Skin implements Serializable {
 	protected boolean switchable = true;
 	protected boolean god = false;
 
-	protected abstract void setColor(GraphicsContext gc);
+	public abstract void setColor(GraphicsContext gc);
 
-	protected abstract void draw(Canvas canvas);
+	public abstract void draw(Canvas canvas);
 
 	public boolean isSwitchable() {
 		return switchable;
@@ -19,5 +19,13 @@ public abstract class Skin implements Serializable {
 
 	public boolean isGod() {
 		return god;
+	}
+
+	public void makeDone() {
+
+	}
+
+	public void unDone() {
+
 	}
 }

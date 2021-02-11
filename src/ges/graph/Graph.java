@@ -1,6 +1,8 @@
 package ges.graph;
 
 import ges.graph.edges.Edge;
+import ges.graph.edges.skins.BaseEdgeSkin;
+import ges.graph.edges.skins.DirectedEdgeSkin;
 import ges.graph.node.Node;
 import javafx.scene.canvas.Canvas;
 
@@ -45,7 +47,7 @@ public class Graph implements Serializable {
 	public Graph(int nodeRadius) {
 		title = "Untitled";
 		this.nodeRadius = nodeRadius;
-		tmpId = new StringBuilder("A");
+		tmpId = new StringBuilder(String.valueOf((char) ('A' - 1)));
 
 		nodes = new LinkedHashSet<>();
 		edges = new LinkedHashSet<>();
@@ -58,8 +60,8 @@ public class Graph implements Serializable {
 	 */
 	public Graph(Graph graph) {
 		nodeRadius = graph.nodeRadius;
-		nodes = new LinkedHashSet<Node>();
-		edges = new LinkedHashSet<Edge>();
+		nodes = new LinkedHashSet<>();
+		edges = new LinkedHashSet<>();
 		LinkedHashSet<Node> added = new LinkedHashSet<>();
 
 		for (Edge edge : graph.edges) {
@@ -83,7 +85,10 @@ public class Graph implements Serializable {
 			}
 
 			if (n1 != null && n2 != null)
-				addEdge(n1, n2);
+				if (edge.getNode(1).getNeighbours().contains(edge.getNode(0)))
+					addEdge(n1, n2);
+				else
+					addDirectedEdge(n1, n2);
 		}
 
 		for (Node node : graph.nodes) {
@@ -115,11 +120,26 @@ public class Graph implements Serializable {
 	 * @param chooser The data shown of the nodes center.
 	 * @return If it is a success.
 	 */
-	public boolean addNode(Position pos, String chooser) {
-		boolean ret = nodes.add(new Node(this, tmpId.toString(), pos, chooser));
+	public Node addNode(Position pos, String chooser) {
+		increaseId();
+
+		Node ret = new Node(this, tmpId.toString(), pos, chooser);
+		nodes.add(ret);
+
+		return ret;
+	}
+
+	public void increaseId() {
+		if (tmpId.length() == 0) {
+			tmpId.append('A');
+			return;
+		}
 
 		for (int i = tmpId.length() - 1; i >= 0; --i) {
-			tmpId.setCharAt(i, (char) (tmpId.charAt(i) + 1));
+			if (tmpId.charAt(i) == ' ')
+				tmpId.setCharAt(i, 'A');
+			else
+				tmpId.setCharAt(i, (char) (tmpId.charAt(i) + 1));
 
 			if (tmpId.charAt(i) <= 'Z')
 				break;
@@ -129,8 +149,6 @@ public class Graph implements Serializable {
 				tmpId.append('A');
 			}
 		}
-
-		return ret;
 	}
 
 	public boolean addNode(Node addable) {
@@ -222,13 +240,12 @@ public class Graph implements Serializable {
 		} else {
 			if (!n1.equals(n2)) {
 				ret = edges.add(new Edge(n1, n2));
+				ret = ret && n1.push(n2);
+				ret = ret && n2.push(n1);
 			} else {
 				ret = false;
 			}
 		}
-
-		ret = ret && n1.push(n2);
-		ret = ret && n2.push(n1);
 
 		return ret;
 	}
@@ -241,6 +258,25 @@ public class Graph implements Serializable {
 	 */
 	public boolean addEdge(Edge edge) {
 		return edges.add(edge);
+	}
+
+	public void addDirectedEdge(Node n1, Node n2) {
+		Edge newEdge = getEdge(n1, n2);
+
+		if (newEdge != null) {
+			if (!newEdge.exactCompare(n1, n2)) {
+				newEdge.setMySkin(new BaseEdgeSkin(newEdge));
+				n1.push(n2);
+				n2.push(n1);
+			}
+		} else {
+			if (!n1.equals(n2)) {
+				newEdge = new Edge(n1, n2);
+				newEdge.setMySkin(new DirectedEdgeSkin(newEdge));
+				addEdge(newEdge);
+				n1.push(n2);
+			}
+		}
 	}
 
 	/**
@@ -262,6 +298,20 @@ public class Graph implements Serializable {
 			ret = ret && n2.pop(n1);
 		}
 		return ret;
+	}
+
+	public void rmDirectedEdge(Node n1, Node n2) {
+		Edge removable = getEdge(n1, n2);
+
+		if (removable != null) {
+			if (n2.getNeighbours().contains(n1)) {
+				removable.getNodes()[0] = n2;
+				removable.getNodes()[1] = n1;
+				removable.setMySkin(new DirectedEdgeSkin(removable));
+			} else {
+				rmEdge(n1, n2);
+			}
+		}
 	}
 
 	/**
@@ -349,30 +399,5 @@ public class Graph implements Serializable {
 			edge.draw(canvas);
 		for (Node node : nodes)
 			node.draw(canvas);
-	}
-
-	public void switchNode(Node from, Node to) {
-		if (nodes.contains(from)) {
-			for (Node nei : from.getNeighbours())
-				to.push(nei);
-			for (Edge edge : edges) {
-				if (edge.nodeInEdge(from)) {
-					if (edge.getNode(0) == from) {
-						edge.getNodes()[0] = to;
-					} else {
-						edge.getNodes()[1] = to;
-					}
-				}
-			}
-			nodes.remove(from);
-			nodes.add(to);
-		}
-	}
-
-	public void switchEdge(Edge from, Edge to) {
-		if (edges.contains(from)) {
-			rmEdge(from);
-			addEdge(to);
-		}
 	}
 }

@@ -26,7 +26,7 @@ public class BFS extends Algorithm {
 	 */
 	LinkedBlockingQueue<Node> processQueue;
 
-	class BFSStep {
+	private static class BFSStep {
 		final int distance;
 		final int index;
 		final String prev;
@@ -57,15 +57,16 @@ public class BFS extends Algorithm {
 			step.addAction(new StateChangeAction(this));
 			state = AlgoState.done;
 		} else {
-			step.addAction(new QueuePollAction<Node>(processQueue));
+			step.addAction(new QueuePollAction<>(processQueue));
 			Node underProcess = processQueue.poll();
+			assert underProcess != null;
 			Node underInVisual = visualGraph.getNode(underProcess.getId());
 
 			for (Node nei : underProcess.getNeighbours()) {
 				if (!(processed.contains(nei) || processQueue.contains(nei))) {
 					try {
 						processQueue.put(nei);
-						step.addAction(new QueuePutAction<Node>(processQueue, nei));
+						step.addAction(new QueuePutAction<>(processQueue, nei));
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -73,7 +74,7 @@ public class BFS extends Algorithm {
 					BFSStep tmpNei = new BFSStep(distances.get(underProcess.getId()).distance + 1, index, underProcess.getId());
 
 					distances.put(nei.getId(), tmpNei);
-					step.addAction(new HashMapPutAction<String, BFSStep>(distances, nei.getId(), tmpNei));
+					step.addAction(new HashMapPutAction<>(distances, nei.getId(), tmpNei));
 
 					index++;
 
@@ -84,15 +85,15 @@ public class BFS extends Algorithm {
 
 					Edge switchEdge = visualGraph.getEdge(switchNode, underInVisual);
 					if (switchEdge != null) {
-						step.addAction(new SkinSetAction(switchEdge));
-						switchEdge.setMySkin(new DoneEdgeSkin(switchEdge));
+						step.addAction(new SkinMakeDoneAction(switchEdge.getMySkin()));
+						switchEdge.getMySkin().makeDone();
 					}
 				}
 			}
 
 			try {
 				processed.put(underProcess);
-				step.addAction(new QueuePutAction<Node>(processed, underProcess));
+				step.addAction(new QueuePutAction<>(processed, underProcess));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

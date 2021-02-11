@@ -13,6 +13,7 @@ public class DoneEdgeSkin extends BaseEdgeSkin {
 	@Override
 	public void setColor(GraphicsContext gc) {
 		gc.setStroke(Color.GREEN);
+		gc.setFill(Color.GREEN);
 		gc.setLineWidth(gc.getLineWidth() * 5);
 	}
 }
