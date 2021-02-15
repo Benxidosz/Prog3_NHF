@@ -1,6 +1,7 @@
 package ges.graph.node.skins;
 
 import ges.graph.Graph;
+import ges.graph.Position;
 import ges.graph.Skin;
 import ges.graph.node.Node;
 import javafx.scene.canvas.Canvas;
@@ -57,5 +58,16 @@ public class BaseNodeSkin extends Skin {
 		drawStroke(x, y, gc);
 
 		drawText(gc, x, y);
+	}
+
+	@Override
+	public String export(double w, double h) {
+		Graph myGraph = myNode.getGraph();
+		Position pos = myNode.getPosition();
+
+		double x1 = (pos.x - w + myGraph.nodeRadius) + 5;
+		double y1 = (pos.y - h + myGraph.nodeRadius) + 5;
+		return "\t<circle cx=\"" + x1 + "\" cy=\"" + y1 + "\" r=\"" + myGraph.nodeRadius + "\" stroke=\"black\" stroke-width=\"3\" fill=\"white\" />\n" +
+				"\t<text x=\"" + x1 + "\" y=\"" + y1 + "\" fill=\"black\">" + myNode.getId() + "</text>";
 	}
 }

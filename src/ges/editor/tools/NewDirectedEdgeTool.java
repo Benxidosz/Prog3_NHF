@@ -55,6 +55,7 @@ public class NewDirectedEdgeTool extends Tool {
 				} else {
 					graph.addDirectedEdge(selectedNode, select);
 					diary.addLog(new NewDirectedEdgeLog(graph, selectedNode, select));
+					graph.getEdge(selectedNode, select).getMySkin().toComplete();
 					selectedNode.selected(false);
 					selectedNode = null;
 				}

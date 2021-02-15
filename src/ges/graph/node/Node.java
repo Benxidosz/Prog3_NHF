@@ -162,21 +162,6 @@ public class Node extends Scheme {
 	}
 
 	/**
-	 * Generate code of svg.
-	 *
-	 * @param w The svg file width.
-	 * @param h The svg file height.
-	 * @return The code.
-	 */
-	@Override
-	public String export(double w, double h) {
-		double x1 = (pos.x - w + myGraph.nodeRadius) + 5;
-		double y1 = (pos.y - h + myGraph.nodeRadius) + 5;
-		return "\t<circle cx=\"" + x1 + "\" cy=\"" + y1 + "\" r=\"" + myGraph.nodeRadius + "\" stroke=\"black\" stroke-width=\"3\" fill=\"white\" />\n" +
-				"\t<text x=\"" + x1 + "\" y=\"" + y1 + "\" fill=\"black\">" + id + "</text>";
-	}
-
-	/**
 	 * Return the selected state.
 	 *
 	 * @param select The value.

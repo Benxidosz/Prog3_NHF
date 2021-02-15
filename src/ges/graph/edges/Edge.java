@@ -55,24 +55,6 @@ public class Edge extends Scheme {
 	}
 
 	/**
-	 * It will generate a svg code, which represents a line, relative to the positions of the Edge's nodes and the svg
-	 * file's width and height.
-	 *
-	 * @param w The svg file width.
-	 * @param h The svg file height.
-	 * @return The code.
-	 */
-	@Override
-	public String export(double w, double h) {
-		int nodeRadius = nodes[0].getGraph().nodeRadius;
-		double x1 = nodes[0].getPosition().x - w + nodeRadius + 5;
-		double x2 = nodes[1].getPosition().x - w + nodeRadius + 5;
-		double y1 = nodes[0].getPosition().y - h + nodeRadius + 5;
-		double y2 = nodes[1].getPosition().y - h + nodeRadius + 5;
-		return "\t<line x1=\"" + x1 + "\" y1=\"" + y1 + "\" x2=\"" + x2 + "\" y2=\"" + y2 + "\" style=\"stroke:rgb(0,0,0);stroke-width:2\" />";
-	}
-
-	/**
 	 * Check if a node is in the edge. (one of the two nodes).
 	 *
 	 * @param node The node, which need to be checked.

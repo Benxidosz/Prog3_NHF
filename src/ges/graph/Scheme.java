@@ -99,7 +99,9 @@ public abstract class Scheme implements Serializable {
 	 * @param h The svg file height.
 	 * @return The svg code of the Scheme.
 	 */
-	public abstract String export(double w, double h);
+	public String export(double w, double h) {
+		return mySkin.export(w, h);
+	}
 
 	public void setMySkin(Skin mySkin) {
 		this.mySkin = mySkin;

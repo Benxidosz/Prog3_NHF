@@ -67,6 +67,18 @@ public class BaseEdgeSkin extends Skin {
 	}
 
 	@Override
+	public String export(double w, double h) {
+		var nodes = myEdge.getNodes();
+
+		int nodeRadius = nodes[0].getGraph().nodeRadius;
+		double x1 = nodes[0].getPosition().x - w + nodeRadius + 5;
+		double x2 = nodes[1].getPosition().x - w + nodeRadius + 5;
+		double y1 = nodes[0].getPosition().y - h + nodeRadius + 5;
+		double y2 = nodes[1].getPosition().y - h + nodeRadius + 5;
+		return "\t<line x1=\"" + x1 + "\" y1=\"" + y1 + "\" x2=\"" + x2 + "\" y2=\"" + y2 + "\" style=\"stroke:rgb(0,0,0);stroke-width:2\" />";
+	}
+
+	@Override
 	public void makeDone() {
 		sideSkin = new DoneEdgeSkin(myEdge);
 	}

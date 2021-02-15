@@ -89,6 +89,8 @@ public class Graph implements Serializable {
 					addEdge(n1, n2);
 				else
 					addDirectedEdge(n1, n2);
+
+			getEdge(n1, n2).getMySkin().toComplete();
 		}
 
 		for (Node node : graph.nodes) {
