@@ -26,6 +26,14 @@ public class BFS extends Algorithm {
 	 */
 	LinkedBlockingQueue<Node> processQueue;
 
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
 	private static class BFSStep {
 		final int distance;
 		final int index;
@@ -52,6 +60,8 @@ public class BFS extends Algorithm {
 	@Override
 	public Step step() {
 		Step step = new Step();
+
+		step.addAction(new BFSValuesChangeAction(this));
 
 		if (processQueue.isEmpty()) {
 			step.addAction(new StateChangeAction(this));
