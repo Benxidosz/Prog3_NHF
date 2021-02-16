@@ -1,6 +1,7 @@
 package ges.editor.tools;
 
 import ges.editor.diary.EditorDiary;
+import ges.editor.diary.logs.RmDirectedEdgeLog;
 import ges.editor.diary.logs.RmEdgeLog;
 import ges.graph.edges.Edge;
 import ges.graph.Graph;
@@ -56,8 +57,16 @@ public class RmEdgeTool extends Tool {
 					selectedNode.selected(false);
 					selectedNode = null;
 				} else {
-					graph.rmEdge(selectedNode, select);
-					diary.addLog(new RmEdgeLog(graph, selectedNode, select));
+					if (selectedNode.getNeighbours().contains(select) && select.getNeighbours().contains(selectedNode)) {
+						graph.rmEdge(selectedNode, select);
+						diary.addLog(new RmEdgeLog(graph, selectedNode, select));
+					} else if (selectedNode.getNeighbours().contains(select)) {
+						graph.rmDirectedEdge(selectedNode, select);
+						diary.addLog(new RmDirectedEdgeLog(graph, selectedNode, select));
+					} else {
+						graph.rmDirectedEdge(select, selectedNode);
+						diary.addLog(new RmDirectedEdgeLog(graph, select, selectedNode));
+					}
 					selectedNode.selected(false);
 					selectedNode = null;
 				}

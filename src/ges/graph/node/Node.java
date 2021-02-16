@@ -20,6 +20,7 @@ public class Node extends Scheme {
 	 * A list of the neighbour Nodes.
 	 */
 	protected final LinkedHashSet<Node> neighbours;
+	protected LinkedHashSet<Node> oldNeighbours;
 	/**
 	 * The node's graph.
 	 */
@@ -59,6 +60,7 @@ public class Node extends Scheme {
 		this.chooser = chooser;
 
 		neighbours = new LinkedHashSet<>();
+		oldNeighbours = new LinkedHashSet<>();
 	}
 
 	/**
@@ -78,9 +80,15 @@ public class Node extends Scheme {
 	 * @return If it is a success.
 	 */
 	public boolean push(Node neighbour) {
+		oldNeighbours.remove(neighbour);
+
 		if (this.equals(neighbour))
 			return false;
 		return neighbours.add(neighbour);
+	}
+
+	public boolean wereNei(Node other) {
+		return oldNeighbours.contains(other);
 	}
 
 	/**
@@ -91,6 +99,12 @@ public class Node extends Scheme {
 	 */
 	public boolean pop(Node neighbour) {
 		return neighbours.remove(neighbour);
+	}
+
+	public void popWithTrack(Node removable) {
+		if (neighbours.contains(removable))
+			oldNeighbours.add(removable);
+		neighbours.remove(removable);
 	}
 
 	/**

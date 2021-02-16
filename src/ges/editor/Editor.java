@@ -58,11 +58,6 @@ public class Editor {
 	public Button editorMove;
 	/**
 	 * A toolButton.
-	 * It is a reference to the button of the fxml, which has editorNewEdge id.
-	 * If it pressed, a NewEdgeTool will be set as active tool.
-	 */
-	/**
-	 * A toolButton.
 	 * It is a reference to the button of the fxml, which has editorRmEdge id.
 	 * If it pressed, a RmNodeTool will be set as active tool.
 	 */
@@ -355,7 +350,8 @@ public class Editor {
 	public void export() throws IOException {
 		File export = new File(wd, "final");
 		if (!export.isDirectory())
-			export.mkdir();
+			if (!export.mkdir())
+				System.err.println("Export directory cannot be made.");
 
 		graph.export(new File(export, graph.title + ".svg"));
 	}
@@ -364,7 +360,7 @@ public class Editor {
 	 * Open a rename pop up window, which data contains the new Title. The Editor window will wait until the pop up,
 	 * not closes. If it does the
 	 *
-	 * @throws IOException
+	 * @throws IOException some exception
 	 */
 	@FXML
 	public void rename() throws IOException {
@@ -391,7 +387,8 @@ public class Editor {
 	public void save() throws IOException {
 		File saves = new File(wd, "saves");
 		if (!saves.isDirectory())
-			saves.mkdir();
+			if (!saves.mkdir())
+				System.err.println("Save directory cannot be made.");
 
 		FileOutputStream fout = new FileOutputStream(new File(saves, graph.title + ".ges"));
 		ObjectOutputStream oos = new ObjectOutputStream(fout);
@@ -455,8 +452,6 @@ public class Editor {
 			System.err.println(noStepException.getMessage());
 		}
 		graph.refresh(myCanvas);
-		if (activeTool != null)
-			activeTool.setGraph(graph);
 	}
 
 	/**
@@ -471,8 +466,6 @@ public class Editor {
 			System.err.println(noStepException.getMessage());
 		}
 		graph.refresh(myCanvas);
-		if (activeTool != null)
-			activeTool.setGraph(graph);
 	}
 
 	/**

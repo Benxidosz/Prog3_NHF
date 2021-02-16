@@ -153,12 +153,23 @@ public class Graph implements Serializable {
 		}
 	}
 
-	public boolean addNode(Node addable) {
-		for (Node nei : addable.getNeighbours()) {
-			nei.push(addable);
-			addEdge(addable, nei);
-		}
-		return nodes.add(addable);
+	public void addNode(Node addable) {
+		addable.getNeighbours().forEach(nei -> {
+			if (nei.wereNei(addable)) {
+				nei.push(addable);
+				addEdge(addable, nei);
+			} else
+				addDirectedEdge(addable, nei);
+		});
+
+		nodes.forEach(node -> {
+			if (node.wereNei(addable)) {
+				node.push(addable);
+				addDirectedEdge(node, addable);
+			}
+		});
+
+		nodes.add(addable);
 	}
 
 	/**
@@ -170,9 +181,7 @@ public class Graph implements Serializable {
 	public boolean rmNode(Node removable) {
 		boolean ret = nodes.remove(removable);
 
-		for (Node node : nodes) {
-			node.pop(removable);
-		}
+		nodes.forEach(node -> node.popWithTrack(removable));
 
 		edges.removeIf(edge -> edge.nodeInEdge(removable));
 
@@ -232,24 +241,23 @@ public class Graph implements Serializable {
 	 *
 	 * @param n1 First.
 	 * @param n2 Second
-	 * @return If it is a success.
 	 */
-	public boolean addEdge(Node n1, Node n2) {
+	public void addEdge(Node n1, Node n2) {
 		Edge newEdge = getEdge(n1, n2);
-		boolean ret;
 		if (newEdge != null) {
-			return true;
+			if (!n1.getNeighbours().contains(n2) || !n2.getNeighbours().contains(n1)) {
+				newEdge.setMySkin(new BaseEdgeSkin(newEdge));
+				n1.push(n2);
+				n2.push(n1);
+			}
 		} else {
 			if (!n1.equals(n2)) {
-				ret = edges.add(new Edge(n1, n2));
-				ret = ret && n1.push(n2);
-				ret = ret && n2.push(n1);
-			} else {
-				ret = false;
+				edges.add(new Edge(n1, n2));
+				n1.push(n2);
+				n2.push(n1);
 			}
 		}
 
-		return ret;
 	}
 
 	/**
@@ -274,7 +282,11 @@ public class Graph implements Serializable {
 		} else {
 			if (!n1.equals(n2)) {
 				newEdge = new Edge(n1, n2);
-				newEdge.setMySkin(new DirectedEdgeSkin(newEdge));
+
+				Skin skin = new DirectedEdgeSkin(newEdge);
+				skin.toComplete();
+				newEdge.setMySkin(skin);
+
 				addEdge(newEdge);
 				n1.push(n2);
 			}
@@ -309,7 +321,12 @@ public class Graph implements Serializable {
 			if (n2.getNeighbours().contains(n1)) {
 				removable.getNodes()[0] = n2;
 				removable.getNodes()[1] = n1;
-				removable.setMySkin(new DirectedEdgeSkin(removable));
+
+				n1.pop(n2);
+
+				Skin skin = new DirectedEdgeSkin(removable);
+				skin.toComplete();
+				removable.setMySkin(skin);
 			} else {
 				rmEdge(n1, n2);
 			}
@@ -393,7 +410,7 @@ public class Graph implements Serializable {
 	/**
 	 * It draw all the elements of the graph.
 	 *
-	 * @param canvas
+	 * @param canvas The program canvas where the graph drawn.
 	 */
 	public void refresh(Canvas canvas) {
 		canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
